@@ -42,5 +42,31 @@ public class Util {
 
     }
 
+    public static int getDamage2(int h_atk, int h_def, int h_mdef, int m_hp, int m_atk, int m_def, int m_spe)
+    {
+        if (m_spe==1) // 魔攻
+            h_def=0;
+        if (m_spe==2) // 坚固
+            m_def=h_atk-1;
+
+        if (h_atk<=m_def) // 无法战斗
+            return 999999999;
+        if (h_def>=m_atk) // 无法造成伤害
+            return 0;
+
+        int damage=0;
+        if (m_spe==3) // 先攻
+            damage+=m_atk-h_def;
+
+        int m_times=1;
+        if (m_spe==4) // 2连击
+            m_times=2;
+
+        damage+=(m_hp-1)/(h_atk-m_def)*(m_atk-h_def)*m_times; // 怪物伤害计算公式
+        damage-=h_mdef;
+
+        return damage<=0?0:damage;
+    }
+
 
 }
