@@ -29,8 +29,8 @@ public class Graph {
     public static final int UPSTAIR = 87;
     public static final int DOWNSTAIR = 88;
 
-    public static final int MONSTER_BOUND = 51;
-    public static final int BOSS_INDEX = 99;
+    public static final int MONSTER_BOUND = 101;
+    public static final int BOSS_INDEX = 199;
 
 
     int floor, row, col;
@@ -202,7 +202,7 @@ public class Graph {
 
         int index=0;
 
-        System.out.println(state.current);
+        // System.out.println(state.current);
 
         /*
 

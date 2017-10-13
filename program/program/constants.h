@@ -23,7 +23,7 @@ public:
 	void destroy();
 	void setMsg(const wchar_t*[50]);
 	void setMsg(const wchar_t*);
-	bool isFree() {return !moving && !opening && !flooring && msg==MESSAGE_NONE;}
+	bool isFree() {return !moving && !opening && !flooring && msg==MESSAGE_NONE && clock()-lasttime>150;}
 	void goOn(c_hero*, c_map_floor*, float);
 	void printInfo();
 

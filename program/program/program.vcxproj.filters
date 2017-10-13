@@ -60,5 +60,6 @@
   <ItemGroup>
     <Text Include="..\..\ReadMe.txt" />
     <Text Include="input.txt" />
+    <Text Include="output.txt" />
   </ItemGroup>
 </Project>

@@ -201,4 +201,5 @@ void c_hero::beat(c_monster* monster)
 		hp-=damage;
 		monster->init(0);
 	}
+	consts.lasttime=clock();
 }
