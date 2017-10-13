@@ -89,6 +89,8 @@ public class Graph {
 
         buildMap();
 
+        mergeNode();
+
     }
 
     public void buildMap() {
@@ -206,14 +208,13 @@ public class Graph {
 
 
     private void mergeNode() {
-        for (int i=0;i<list.size();i++) {
+        for (int i=1;i<list.size();i++) {
             Node n1=list.get(i);
-            if (!n1.valid || n1.item!=null) continue;
-            for (Node n2: n1.linked) {
-                if (!n2.valid) continue;
+            for (int j=i+1;j<list.size();j++) {
+                Node n2=list.get(j);
                 if (shouldMerge(n1, n2)) {
-
-                    n2.valid=false;
+                    n1.merge(n2, new boolean[floor][row][col]);
+                    list.remove(j);
                     mergeNode();
                     return;
                 }
@@ -222,13 +223,23 @@ public class Graph {
     }
 
     private boolean shouldMerge(Node n1, Node n2) {
-        if (!n1.valid || !n2.valid) return false;
         if (n1.item!=null || n2.item!=null) return false;
-        if (!n1.linked.contains(n2) && n2.linked.contains(n1)) return false;
-
-        for (Node node: n2.linked) {
+        if (n1.type==BOSS_INDEX || n2.type==BOSS_INDEX) return false;
+        if (!n1.linked.contains(n2) || !n2.linked.contains(n1)) return false;
+        for (Node node: n2.linked)
             if (n1.linked.contains(node))
                 return false;
+        for (Node node: n1.linked)
+            if (n2.linked.contains(node))
+                return false;
+        for (Node u: new Node[] {n1, n2}) {
+            Node v=u==n1?n2:n1;
+            for (Node x: u.linked) {
+                for (Node y: u.linked) {
+                    if (x.equals(y) || x.equals(v) || y.equals(v)) continue;
+                    if (!x.linked.contains(y) || !y.linked.contains(x)) return false;
+                }
+            }
         }
         return true;
     }
@@ -252,7 +263,7 @@ public class Graph {
                 int nx=x+dir[0], ny=y+dir[1];
                 if (nx<0 || nx>=row || ny<0 || ny>=col) continue;
                 if (nx==x2 && ny==y2) return true;
-                if (visited[nx][ny] || map[f1][nx][ny]!=ROAD) continue;
+                if (visited[nx][ny] || (map[f1][nx][ny]!=ROAD && map[f1][nx][ny]!=UPSTAIR && map[f1][nx][ny]!=DOWNSTAIR)) continue;
                 visited[nx][ny]=true;
                 queue.offer(nx); queue.offer(ny);
             }
@@ -339,7 +350,7 @@ public class Graph {
             // extend
             for (Node node: state.current.linked) {
                 // visited
-                if (state.visited[node.f][node.x][node.y] || !node.valid) continue;
+                if (state.visited[node.f][node.x][node.y]) continue;
 
                 /*
                 // should extend?

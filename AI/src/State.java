@@ -102,7 +102,7 @@ public class State {
     public String getString() {
         StringBuilder builder=new StringBuilder();
         for (Node node: graph.list) {
-            if (!node.valid || node.item!=null) continue;
+            if (node.item!=null) continue;
             builder.append(visited[node.f][node.x][node.y]?'1':'0');
         }
         return builder.toString();

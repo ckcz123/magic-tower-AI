@@ -17,8 +17,6 @@ public class Node {
     ArrayList<Integer> doors;
     ArrayList<Monster> monsters;
 
-    boolean valid;
-
     // 坐标
     int f,x,y;
 
@@ -43,7 +41,6 @@ public class Node {
         if (door!=0) doors.add(door);
         f=_f; x=_x; y=_y;
         linked=new HashSet<>();
-        valid=true;
     }
 
     public void addNode(Node another) {
@@ -90,6 +87,26 @@ public class Node {
             return node;
         }
 
+        else {
+            // merge two nodes
+
+            // merge doors...
+            doors.addAll(another.doors);
+            // merge monsters...
+            monsters.addAll(another.monsters);
+
+            // merge nodes
+            for (Node to: another.linked) {
+                if (!to.equals(this)) {
+                    linked.add(to);
+                    to.addNode(this);
+                }
+                to.linked.remove(another);
+            }
+
+            return this;
+        }
+
         /*
 
         // 非怪物
@@ -119,9 +136,8 @@ public class Node {
                 node.addNode(to);
         }
 
-        */
-
         return node;
+        */
     }
 
     public boolean equals(Object another) {
@@ -132,20 +148,6 @@ public class Node {
         return 1000000*f+1000*x+y;
     }
 
-    /*
-    public boolean isDoor() {
-        return type==Graph.DOOR_YELLOW || type==Graph.DOOR_BLUE || type==Graph.DOOR_RED;
-    }
-
-    public boolean isMonster() {
-        return type>=Graph.MONSTER_BOUND;
-    }
-
-    public boolean isItem() {
-        return !isDoor() && !isMonster();
-    }
-    */
-
     public int getScore() {
         // return hp+1000*(atk+def)+60*mdef+300*yellow+450*blue+600*red;
         return hero==null?0:hero.getScore();
@@ -154,11 +156,16 @@ public class Node {
     public boolean shouldEat(Hero hero) {
         if (this.hero!=null) return false;
         if (item!=null) return true;
+        return false;
+        /*
         if (!doors.isEmpty()) return false;
-        int damage=0;
+        if (monsters.isEmpty()) return false;
         for (Monster monster: monsters)
-            damage+=Util.getDamage(hero.atk, hero.def, hero.mdef, monster.hp, monster.atk, monster.def, monster.special);
-        return damage==0;
+            if (Util.getDamage(hero.atk, hero.def, hero.mdef, monster.hp, monster.atk, monster.def, monster.special)!=0)
+                return false;
+        return true;
+        */
+
     }
 
     public String toString() {

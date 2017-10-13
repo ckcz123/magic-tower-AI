@@ -11,13 +11,18 @@ public class Main {
 
         System.out.println("------ Printing Nodes ------");
 
+        int valid=0;
+
         for (Node node: graph.list) {
             System.out.println(node);
+            if (!node.doors.isEmpty() || !node.monsters.isEmpty())
+                valid++;
         }
 
+
+        System.out.println(valid+"/"+graph.list.size()+" nodes in total.");
+
         graph.run();
-
-
 
     }
     
