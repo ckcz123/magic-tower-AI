@@ -106,38 +106,6 @@ public class Node {
 
             return this;
         }
-
-        /*
-
-        // 非怪物
-        if (!another.isMonster()) {
-            node = new Node(hp+another.hp, atk+another.atk, def+another.def,
-                    mdef+another.mdef, type, another.f, another.x, another.y);
-        }
-        // 怪物
-        else {
-            int damage = Util.getDamage(atk, def, mdef, another.hp, another.atk, another.def, another.mdef);
-            node = new Node(hp-damage, atk, def, mdef, type, another.f, another.x, another.y);
-        }
-
-        node.yellow = yellow+another.yellow;
-        node.red = red+another.red;
-        node.blue = blue+another.blue;
-        node.pickaxe=pickaxe+another.pickaxe;
-        node.bomb=bomb+another.bomb;
-
-        // 加边
-        for (Node to: linked) {
-            if (!visited[to.f][to.x][to.y])
-                node.addNode(to);
-        }
-        for (Node to: another.linked) {
-            if (!visited[to.f][to.x][to.y])
-                node.addNode(to);
-        }
-
-        return node;
-        */
     }
 
     public boolean equals(Object another) {
@@ -156,7 +124,9 @@ public class Node {
     public boolean shouldEat(Hero hero) {
         if (this.hero!=null) return false;
         if (item!=null) return true;
+
         return false;
+
         /*
         if (!doors.isEmpty()) return false;
         if (monsters.isEmpty()) return false;
@@ -165,6 +135,7 @@ public class Node {
                 return false;
         return true;
         */
+
 
     }
 

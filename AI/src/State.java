@@ -44,26 +44,15 @@ public class State {
         if (visited[node.f][node.x][node.y] || !current.linked.contains(node))
             return null;
 
-        /*
-        if (node.type==Graph.DOOR_YELLOW && current.yellow==0) return null;
-        if (node.type==Graph.DOOR_BLUE && current.blue==0) return null;
-        if (node.type==Graph.DOOR_RED && current.red==0) return null;
-        if (node.isMonster() &&
-                Util.getDamage(current.atk, current.def, current.mdef,
-                        node.hp, node.atk, node.def, node.mdef)>=current.hp) return null;
-                        */
         Node another = current.merge(node, visited);
         if (another==null) return null;
 
         current=another;
 
-        // current=current.merge(node, visited);
-        // if (current.hp<=0 || current.yellow<0 || current.blue<0 || current.red<0) return null;
         visited[current.f][current.x][current.y]=true;
         route.add(current.toString());
         eatItem();
         cnt+=node.monsters.size()+node.doors.size();
-        //route.add(current.toString());
         return this;
     }
 

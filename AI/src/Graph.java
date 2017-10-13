@@ -232,6 +232,7 @@ public class Graph {
         for (Node node: n1.linked)
             if (n2.linked.contains(node))
                 return false;
+        if (n1.linked.size()==1 || n2.linked.size()==1) return false;
         for (Node u: new Node[] {n1, n2}) {
             Node v=u==n1?n2:n1;
             for (Node x: u.linked) {
