@@ -35,7 +35,7 @@ public class Node {
         }
         // 怪物
         else {
-            int damage = Util.getDamage2(atk, def, mdef, another.hp, another.atk, another.def, another.mdef);
+            int damage = Util.getDamage(atk, def, mdef, another.hp, another.atk, another.def, another.mdef);
             node = new Node(hp-damage, atk, def, mdef, type, another.f, another.x, another.y);
         }
         node.yellow = yellow+another.yellow;

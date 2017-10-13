@@ -48,7 +48,7 @@ public class State {
         if (node.type==Graph.DOOR_BLUE && current.blue==0) return null;
         if (node.type==Graph.DOOR_RED && current.red==0) return null;
         if (node.isMonster() &&
-                Util.getDamage2(current.atk, current.def, current.mdef,
+                Util.getDamage(current.atk, current.def, current.mdef,
                         node.hp, node.atk, node.def, node.mdef)>=current.hp) return null;
 
         current=current.merge(node, visited);
@@ -72,7 +72,7 @@ public class State {
 
 
                 if (node.isDoor() || (node.isMonster() &&
-                        Util.getDamage2(current.atk, current.def, current.mdef,
+                        Util.getDamage(current.atk, current.def, current.mdef,
                                 node.hp, node.atk, node.def, node.mdef)>0)) continue;
 
 

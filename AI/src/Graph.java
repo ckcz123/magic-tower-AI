@@ -8,15 +8,15 @@ public class Graph {
     public static final int ROAD = 0;
     public static final int WALL = 1;
 
-    public static final int UPSTAIR = 87;
-    public static final int DOWNSTAIR = 88;
+
+    public static final int RED_JEWEL = 11;
+    public static final int BLUE_JEWEL = 12;
+    public static final int GREEN_JEWEL = 13;
 
     public static final int YELLOW_KEY = 15;
     public static final int BLUE_KEY = 16;
     public static final int RED_KEY = 17;
-    public static final int RED_JEWEL = 11;
-    public static final int BLUE_JEWEL = 12;
-    public static final int GREEN_JEWEL = 13;
+
     public static final int RED_POTION = 18;
     public static final int BLUE_POTION = 19;
     public static final int YELLOW_POTION = 20;
@@ -26,8 +26,11 @@ public class Graph {
     public static final int DOOR_BLUE = 82;
     public static final int DOOR_RED = 83;
 
-    public static final int MONSTER_BOUND = 101;
-    public static final int BOSS_INDEX = 199;
+    public static final int UPSTAIR = 87;
+    public static final int DOWNSTAIR = 88;
+
+    public static final int MONSTER_BOUND = 51;
+    public static final int BOSS_INDEX = 99;
 
 
     int floor, row, col;
@@ -63,8 +66,8 @@ public class Graph {
         p_mdef=scanner.nextInt();
         p_red=scanner.nextInt();
         p_blue=scanner.nextInt();
-        //p_yellow=scanner.nextInt();
-        //p_green=scanner.nextInt();
+        p_yellow=scanner.nextInt();
+        p_green=scanner.nextInt();
 
         // Monsters
         monsterMap=new HashMap<>();
@@ -75,8 +78,13 @@ public class Graph {
         }
 
         // Initial Node
-        list.add(new Node(scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt(),
-                0, 0, scanner.nextInt(), scanner.nextInt()));
+        int hp=scanner.nextInt(), atk=scanner.nextInt(), def=scanner.nextInt(), mdef=scanner.nextInt(),
+                yellow=scanner.nextInt(), blue=scanner.nextInt(), red=scanner.nextInt(),
+                floor=scanner.nextInt(), x=scanner.nextInt(), y=scanner.nextInt();
+
+        Node node=new Node(hp, atk, def, mdef, 0, floor, x, y);
+        node.yellow=yellow; node.blue=blue; node.red=red;
+        list.add(node);
 
         buildMap();
 
@@ -194,7 +202,7 @@ public class Graph {
 
         int index=0;
 
-        // System.out.println(state.current);
+        System.out.println(state.current);
 
         /*
 
