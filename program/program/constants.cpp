@@ -149,11 +149,11 @@ void constants::goOn(c_hero* hero, c_map_floor* currFloor, float dt)
 }
 void constants::printInfo()
 {
-	s_step->Render(ScreenLeft+map_width*32+16, 340);
-	hgef->printf(ScreenLeft+map_width*32+60, 342, HGETEXT_LEFT, "%d", step);
+	s_step->Render(ScreenLeft+map_width*32+16, 32*map_height-76);
+	hgef->printf(ScreenLeft+map_width*32+60, 32*map_height-72, HGETEXT_LEFT, "%d", step);
 	int ptm=playtime;
-	s_time->Render(ScreenLeft+map_width*32+16,296);
+	s_time->Render(ScreenLeft+map_width*32+16,32*map_height-120);
 	if (ptm>=3600)
-		hgef->printf(ScreenLeft+map_width*32+60,300,HGETEXT_LEFT,"%02d : %02d : %02d",ptm/3600, (ptm/60)%60, ptm%60);
-	else hgef->printf(ScreenLeft+map_width*32+60,300,HGETEXT_LEFT,"%02d : %02d", ptm/60, ptm%60);
+		hgef->printf(ScreenLeft+map_width*32+60,32*map_height-116,HGETEXT_LEFT,"%02d : %02d : %02d",ptm/3600, (ptm/60)%60, ptm%60);
+	else hgef->printf(ScreenLeft+map_width*32+60,32*map_height-116,HGETEXT_LEFT,"%02d : %02d", ptm/60, ptm%60);
 }

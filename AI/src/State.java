@@ -44,19 +44,25 @@ public class State {
         if (visited[node.f][node.x][node.y] || !current.linked.contains(node))
             return null;
 
+        /*
         if (node.type==Graph.DOOR_YELLOW && current.yellow==0) return null;
         if (node.type==Graph.DOOR_BLUE && current.blue==0) return null;
         if (node.type==Graph.DOOR_RED && current.red==0) return null;
         if (node.isMonster() &&
                 Util.getDamage(current.atk, current.def, current.mdef,
                         node.hp, node.atk, node.def, node.mdef)>=current.hp) return null;
+                        */
+        Node another = current.merge(node, visited);
+        if (another==null) return null;
 
-        current=current.merge(node, visited);
+        current=another;
+
+        // current=current.merge(node, visited);
         // if (current.hp<=0 || current.yellow<0 || current.blue<0 || current.red<0) return null;
         visited[current.f][current.x][current.y]=true;
         route.add(current.toString());
         eatItem();
-        cnt++;
+        cnt+=node.monsters.size()+node.doors.size();
         //route.add(current.toString());
         return this;
     }
@@ -70,13 +76,9 @@ public class State {
             for (Node node: current.linked) {
                 if (visited[node.f][node.x][node.y]) continue;
 
-
-                if (node.isDoor() || (node.isMonster() &&
-                        Util.getDamage(current.atk, current.def, current.mdef,
-                                node.hp, node.atk, node.def, node.mdef)>0)) continue;
-
-
+                // if (node.isDoor() || (node.isMonster() && Util.getDamage(current.atk, current.def, current.mdef, node.hp, node.atk, node.def, node.mdef)>0)) continue;
                 // if (node.isDoor() || node.isMonster()) continue;
+                if (!node.shouldEat(current.hero)) continue;
 
                 has=true;
                 current=current.merge(node, visited);
@@ -92,6 +94,7 @@ public class State {
 
         // Boss被打死？
         if (graph.boss!=null && visited[graph.boss.f][graph.boss.x][graph.boss.y]) return true;
+        // if (current.f>0) return true;
 
         return false;
     }
@@ -99,7 +102,7 @@ public class State {
     public String getString() {
         StringBuilder builder=new StringBuilder();
         for (Node node: graph.list) {
-            if (node.isItem()) continue;
+            if (!node.valid || node.item!=null) continue;
             builder.append(visited[node.f][node.x][node.y]?'1':'0');
         }
         return builder.toString();

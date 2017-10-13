@@ -82,8 +82,9 @@ public class Graph {
                 yellow=scanner.nextInt(), blue=scanner.nextInt(), red=scanner.nextInt(),
                 floor=scanner.nextInt(), x=scanner.nextInt(), y=scanner.nextInt();
 
-        Node node=new Node(hp, atk, def, mdef, 0, floor, x, y);
-        node.yellow=yellow; node.blue=blue; node.red=red;
+        Node node=new Node(0, new Hero(hp, atk, def, mdef, yellow, blue, red), null, null, 0,
+                floor, x, y);
+        // node.yellow=yellow; node.blue=blue; node.red=red;
         list.add(node);
 
         buildMap();
@@ -102,49 +103,85 @@ public class Graph {
                         stair[i][2]=j; stair[i][3]=k;
                     }
                     if (map[i][j][k]==YELLOW_KEY) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.yellow=1;
+                        // node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        // node.yellow=1;
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,0,0,1,0,0),
+                                0,i,j,k);
                     }
                     if (map[i][j][k]==BLUE_KEY) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.blue=1;
+                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        //node.blue=1;
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,0,0,0,1,0),
+                                0,i,j,k);
                     }
                     if (map[i][j][k]==RED_KEY) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.red=1;
+                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        //node.red=1;
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,0,0,0,0,1),
+                                0,i,j,k);
                     }
                     if (map[i][j][k]==RED_JEWEL)
-                        node=new Node(0,p_atk,0,0,map[i][j][k],i,j,k);
+                        // node=new Node(0,p_atk,0,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,p_atk,0,0,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==BLUE_JEWEL)
-                        node=new Node(0,0,p_def,0,map[i][j][k],i,j,k);
+                        // node=new Node(0,0,p_def,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,p_def,0,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==GREEN_JEWEL)
-                        node=new Node(0,0,0,p_mdef,map[i][j][k],i,j,k);
+                        // node=new Node(0,0,0,p_mdef,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,0,p_mdef,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==RED_POTION)
-                        node=new Node(p_red,0,0,0,map[i][j][k],i,j,k);
+                        // node=new Node(p_red,0,0,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(p_red,0,0,0,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==BLUE_POTION)
-                        node=new Node(p_blue,0,0,0,map[i][j][k],i,j,k);
+                        // node=new Node(p_blue,0,0,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(p_blue,0,0,0,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==YELLOW_POTION)
-                        node=new Node(p_yellow,0,0,0,map[i][j][k],i,j,k);
+                        // node=new Node(p_yellow,0,0,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(p_yellow,0,0,0,0,0,0),
+                                0,i,j,k);
                     if (map[i][j][k]==GREEN_POTION)
-                        node=new Node(p_green,0,0,0,map[i][j][k],i,j,k);
+                        // node=new Node(p_green,0,0,0,map[i][j][k],i,j,k);
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(p_green,0,0,0,0,0,0),
+                                0,i,j,k);
+
                     if (map[i][j][k]==DOOR_YELLOW) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.yellow=-1;
+                        // node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        // node.yellow=-1;
+                        node=new Node(map[i][j][k], null, null, null, 1, i,j,k);
                     }
                     if (map[i][j][k]==DOOR_BLUE) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.blue=-1;
+                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        //node.blue=-1;
+                        node=new Node(map[i][j][k], null, null, null, 2, i,j,k);
                     }
                     if (map[i][j][k]==DOOR_RED) {
-                        node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        node.red=-1;
+                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
+                        //node.red=-1;
+                        node=new Node(map[i][j][k], null, null, null, 3, i,j,k);
                     }
                     if (map[i][j][k]>=MONSTER_BOUND) {
                         Monster monster=monsterMap.get(map[i][j][k]);
                         if (monster==null) continue;
-                        node=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
+                        // node=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
+                        node=new Node(map[i][j][k], null, monster, null, 0, i, j, k);
                         if (map[i][j][k]==BOSS_INDEX) {
-                            boss=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
+                            // boss=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
+                            boss=new Node(0,null,null,null,0,i,j,k);
                         }
                     }
 
@@ -165,6 +202,35 @@ public class Graph {
                 }
             }
         }
+    }
+
+
+    private void mergeNode() {
+        for (int i=0;i<list.size();i++) {
+            Node n1=list.get(i);
+            if (!n1.valid || n1.item!=null) continue;
+            for (Node n2: n1.linked) {
+                if (!n2.valid) continue;
+                if (shouldMerge(n1, n2)) {
+
+                    n2.valid=false;
+                    mergeNode();
+                    return;
+                }
+            }
+        }
+    }
+
+    private boolean shouldMerge(Node n1, Node n2) {
+        if (!n1.valid || !n2.valid) return false;
+        if (n1.item!=null || n2.item!=null) return false;
+        if (!n1.linked.contains(n2) && n2.linked.contains(n1)) return false;
+
+        for (Node node: n2.linked) {
+            if (n1.linked.contains(node))
+                return false;
+        }
+        return true;
     }
 
     private boolean isLinked(int f1, int x1, int y1, int f2, int x2, int y2) {
@@ -273,7 +339,23 @@ public class Graph {
             // extend
             for (Node node: state.current.linked) {
                 // visited
-                if (state.visited[node.f][node.x][node.y]) continue;
+                if (state.visited[node.f][node.x][node.y] || !node.valid) continue;
+
+                /*
+                // should extend?
+                boolean shouldExtend=false;
+                for (Node x: node.linked) {
+                    if (!x.equals(state.current) && !state.current.linked.contains(x)) {
+                        shouldExtend=true;
+                        break;
+                    }
+                }
+                if (!shouldExtend) {
+                    //state.visited[node.f][node.x][node.y]=true;
+                    continue;
+                }
+                */
+
 
                 // extend
                 State another=new State(state).merge(node);
