@@ -213,7 +213,7 @@ public class Graph {
             for (int j=i+1;j<list.size();j++) {
                 Node n2=list.get(j);
                 if (shouldMerge(n1, n2)) {
-                    n1.merge(n2, new boolean[floor][row][col]);
+                    n1.merge(n2);
                     list.remove(j);
                     mergeNode();
                     return;
@@ -229,10 +229,6 @@ public class Graph {
         for (Node node: n2.linked)
             if (n1.linked.contains(node))
                 return false;
-        for (Node node: n1.linked)
-            if (n2.linked.contains(node))
-                return false;
-        if (n1.linked.size()==1 || n2.linked.size()==1) return false;
         for (Node u: new Node[] {n1, n2}) {
             Node v=u==n1?n2:n1;
             for (Node x: u.linked) {
