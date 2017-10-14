@@ -72,10 +72,10 @@ public class State {
         return false;
     }
 
-    public String getString() {
+    public String hashString() {
         StringBuilder builder=new StringBuilder();
         for (Node node: graph.list) {
-            if (node.item!=null) continue;
+            if (node.doors.isEmpty() && node.monsters.isEmpty()) continue;
             builder.append(visited[node.id]?'1':'0');
         }
         return builder.toString();

@@ -253,6 +253,7 @@ public class Graph {
         int index=0;
 
         HashSet<String> set=new HashSet<>();
+        HashMap<String, Integer> map=new HashMap<>();
 
         // !!! start bfs !!!!!
 
@@ -267,7 +268,7 @@ public class Graph {
         while (!queue.isEmpty()) {
             state=queue.poll();
 
-            if (!set.add(state.getString())) continue;
+            if (!set.add(state.hashString())) continue;
 
             if (state.shouldStop()) {
                 if (answer==null || answer.getScore()<state.getScore())
@@ -297,7 +298,10 @@ public class Graph {
 
                 // extend
                 State another=new State(state).merge(node);
-                if (another==null || set.contains(another.getString())) continue;
+                if (another==null) continue;
+                String hash=another.hashString();
+                if (map.getOrDefault(hash, -1)>another.getScore()) continue;
+                map.put(hash, another.getScore());
                 queue.offer(another);
 
             }
