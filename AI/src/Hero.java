@@ -19,9 +19,13 @@ public class Hero {
         yellow+=item.yellow; blue+=item.blue; red+=item.red;
     }
 
+    public boolean isValid() {
+        return hp>0 && yellow>=0 && blue>=0 && red>=0;
+    }
+
     public int getScore() {
-        // return hp+1000*(atk+def)+60*mdef+300*yellow+450*blue+600*red
-        return hp;
+        return hp+1000*(atk+def)+60*mdef+300*yellow+450*blue+600*red;
+        // return hp;
     }
 
     public String toString() {

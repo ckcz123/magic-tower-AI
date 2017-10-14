@@ -6,19 +6,16 @@ import java.util.HashSet;
  */
 public class Node {
 
-
-    // 节点类型
-    int type;
-
+    // 节点的ID，节点的类型
+    int id, type;
+    // 节点坐标
+    int f,x,y;
     // 当前各种属性
     Hero hero=null;
     Item item=null;
     ArrayList<Integer> doors;
     ArrayList<Monster> monsters;
-
-    // 坐标
-    int f,x,y;
-
+    // 邻接表记录所有相邻节点
     HashSet<Node> linked;
 
     public Node(int _type, Hero _hero, Monster monster, Item _item, int door, int _f, int _x, int _y) {
@@ -32,6 +29,8 @@ public class Node {
         f=_f; x=_x; y=_y;
         linked=new HashSet<>();
     }
+
+    public void setId(int _id) {id=_id;}
 
     public void addNode(Node another) {
         linked.add(another);
@@ -53,8 +52,10 @@ public class Node {
         }
     }
 
-    public Node merge(Node another, boolean[][][] visited) {
-        Node node = new Node(type, new Hero(hero), null, null, 0, another.f, another.x, another.y);
+    public Node merge(Node another, boolean[] visited) {
+        Node node = new Node(type, new Hero(hero), null, null, 0,
+                another.f, another.x, another.y);
+        node.linked = new HashSet<>(linked);
 
         // get item
         if (another.item!=null)
@@ -69,20 +70,15 @@ public class Node {
 
         // beat monsters...
         for (Monster monster: another.monsters) {
-            node.hero.hp -= Util.getDamage(node.hero.atk, node.hero.def, node.hero.mdef, monster.hp,
-                    monster.atk, monster.def, monster.special);
+            node.hero.hp -= Util.getDamage(node.hero, monster);
         }
 
-        if (node.hero.yellow<0 || node.hero.blue<0 || node.hero.red<0 || node.hero.hp<=0)
+        if (!node.hero.isValid())
             return null;
 
-        //
-        for (Node to: linked) {
-            if (!visited[to.f][to.x][to.y])
-                node.addNode(to);
-        }
+        // merge linked nodes
         for (Node to: another.linked) {
-            if (!visited[to.f][to.x][to.y])
+            if (!visited[to.id])
                 node.addNode(to);
         }
 
@@ -98,17 +94,15 @@ public class Node {
     }
 
     public int getScore() {
-        // return hp+1000*(atk+def)+60*mdef+300*yellow+450*blue+600*red;
         return hero==null?0:hero.getScore();
     }
 
     public boolean shouldEat(Hero hero) {
-        if (this.hero!=null) return false;
         if (item!=null) return true;
-
         return false;
 
         /*
+        // 无伤怪物直接干掉
         if (!doors.isEmpty()) return false;
         if (monsters.isEmpty()) return false;
         for (Monster monster: monsters)
@@ -122,6 +116,7 @@ public class Node {
 
     public String toString() {
         StringBuilder builder=new StringBuilder();
+        if (id!=0) builder.append("Id=").append(id).append(": ");
         builder.append(String.format("(%s,%s,%s)", f, x, y));
         if (hero!=null) {
             builder.append(" -- Hero: ").append(hero.toString());

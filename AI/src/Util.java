@@ -3,13 +3,17 @@
  */
 public class Util {
 
+    public static int getDamage(Hero hero, Monster monster) {
+        return getDamage(hero.atk, hero.def, hero.mdef, monster.hp, monster.atk, monster.def, monster.special);
+    }
+
     /**
      * 计算伤害<br/>
      * <ol><li>先攻</li><li>魔攻</li><li>坚固</li><li>2连击</li><li>3连击</li><li>4连击</li>
      * <li>破甲</li><li>反击</li><li>净化</li><li>模仿</li></ol>
      * @return
      */
-    public static int getDamage(int hero_atk, int hero_def, int hero_mdef,
+    private static int getDamage(int hero_atk, int hero_def, int hero_mdef,
                                 int mon_hp, int mon_atk, int mon_def, int mon_special) {
         // 魔攻
         if (mon_special==2) hero_def=0;

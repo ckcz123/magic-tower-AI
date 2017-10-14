@@ -38,7 +38,7 @@ public class Graph {
     // up 0,1  down 2,3
     int[][] stair;
 
-    Node boss=null;
+    int bossId=-1;
 
     int p_atk, p_def, p_mdef, p_red, p_blue, p_yellow, p_green;
     HashMap<Integer, Monster> monsterMap;
@@ -84,12 +84,18 @@ public class Graph {
 
         Node node=new Node(0, new Hero(hp, atk, def, mdef, yellow, blue, red), null, null, 0,
                 floor, x, y);
-        // node.yellow=yellow; node.blue=blue; node.red=red;
         list.add(node);
 
         buildMap();
 
         mergeNode();
+
+        // set id
+        for (int i=0;i<list.size();i++) {
+            list.get(i).setId(i);
+            if (list.get(i).type==BOSS_INDEX)
+                bossId=i;
+        }
 
     }
 
@@ -104,87 +110,57 @@ public class Graph {
                     if (map[i][j][k]==DOWNSTAIR) {
                         stair[i][2]=j; stair[i][3]=k;
                     }
-                    if (map[i][j][k]==YELLOW_KEY) {
-                        // node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        // node.yellow=1;
+                    if (map[i][j][k]==YELLOW_KEY)
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,0,0,0,1,0,0),
                                 0,i,j,k);
-                    }
-                    if (map[i][j][k]==BLUE_KEY) {
-                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        //node.blue=1;
+                    if (map[i][j][k]==BLUE_KEY)
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,0,0,0,0,1,0),
                                 0,i,j,k);
-                    }
-                    if (map[i][j][k]==RED_KEY) {
-                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        //node.red=1;
+                    if (map[i][j][k]==RED_KEY)
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,0,0,0,0,0,1),
                                 0,i,j,k);
-                    }
                     if (map[i][j][k]==RED_JEWEL)
-                        // node=new Node(0,p_atk,0,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,p_atk,0,0,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==BLUE_JEWEL)
-                        // node=new Node(0,0,p_def,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,0,p_def,0,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==GREEN_JEWEL)
-                        // node=new Node(0,0,0,p_mdef,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(0,0,0,p_mdef,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==RED_POTION)
-                        // node=new Node(p_red,0,0,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(p_red,0,0,0,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==BLUE_POTION)
-                        // node=new Node(p_blue,0,0,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(p_blue,0,0,0,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==YELLOW_POTION)
-                        // node=new Node(p_yellow,0,0,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(p_yellow,0,0,0,0,0,0),
                                 0,i,j,k);
                     if (map[i][j][k]==GREEN_POTION)
-                        // node=new Node(p_green,0,0,0,map[i][j][k],i,j,k);
                         node=new Node(map[i][j][k], null, null,
                                 new Item(p_green,0,0,0,0,0,0),
                                 0,i,j,k);
 
-                    if (map[i][j][k]==DOOR_YELLOW) {
-                        // node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        // node.yellow=-1;
+                    if (map[i][j][k]==DOOR_YELLOW)
                         node=new Node(map[i][j][k], null, null, null, 1, i,j,k);
-                    }
-                    if (map[i][j][k]==DOOR_BLUE) {
-                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        //node.blue=-1;
+                    if (map[i][j][k]==DOOR_BLUE)
                         node=new Node(map[i][j][k], null, null, null, 2, i,j,k);
-                    }
-                    if (map[i][j][k]==DOOR_RED) {
-                        //node=new Node(0,0,0,0,map[i][j][k],i,j,k);
-                        //node.red=-1;
+                    if (map[i][j][k]==DOOR_RED)
                         node=new Node(map[i][j][k], null, null, null, 3, i,j,k);
-                    }
                     if (map[i][j][k]>=MONSTER_BOUND) {
                         Monster monster=monsterMap.get(map[i][j][k]);
                         if (monster==null) continue;
-                        // node=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
                         node=new Node(map[i][j][k], null, monster, null, 0, i, j, k);
-                        if (map[i][j][k]==BOSS_INDEX) {
-                            // boss=new Node(monster.hp, monster.atk, monster.def, monster.special, map[i][j][k], i, j, k);
-                            boss=new Node(0,null,null,null,0,i,j,k);
-                        }
                     }
 
                     if (node!=null)
@@ -276,53 +252,9 @@ public class Graph {
 
         int index=0;
 
-        // System.out.println(state.current);
-
-        /*
-
-        // 判断该状态已经访问过
-        HashSet<String> ableSet=new HashSet<>();
-
-        // First: BFS to find all possible states
-        Queue<State> queue=new PriorityQueue<>((s1,s2)->{
-            if (s1.cnt==s2.cnt) return s2.getScore()-s1.getScore();
-            return s1.cnt-s2.cnt;
-        });
-
-        queue.offer(new State(this, list.get(0)));
-        while (!queue.isEmpty()) {
-            State state1=queue.poll();
-            if (!ableSet.add(state1.getString())) continue;
-
-            for (Node node: state1.current.linked) {
-                // visited
-                if (state1.visited[node.f][node.x][node.y]) continue;
-
-                // extend
-                State another=new State(state1).merge(node);
-                if (another==null || ableSet.contains(another.getString())) continue;
-                // if (another==null || !ableSet.add(another.getString())) continue;
-                queue.offer(another);
-            }
-
-            index++;
-            if (index%1000==0) {
-                System.out.println(String.format("Calculating... %d calculated, %d still in queue.", index, queue.size()));
-            }
-
-        }
-
-        System.out.println("Size: "+ableSet.size());
-
-
-        */
-
-
-
         HashSet<String> set=new HashSet<>();
 
         // !!! start bfs !!!!!
-        // set.add(state.getString());
 
         long start=System.currentTimeMillis();
 
@@ -347,7 +279,7 @@ public class Graph {
             // extend
             for (Node node: state.current.linked) {
                 // visited
-                if (state.visited[node.f][node.x][node.y]) continue;
+                if (state.visited[node.id]) continue;
 
                 /*
                 // should extend?
@@ -359,16 +291,13 @@ public class Graph {
                     }
                 }
                 if (!shouldExtend) {
-                    //state.visited[node.f][node.x][node.y]=true;
                     continue;
                 }
                 */
 
-
                 // extend
                 State another=new State(state).merge(node);
                 if (another==null || set.contains(another.getString())) continue;
-                // if (another==null) continue;
                 queue.offer(another);
 
             }
