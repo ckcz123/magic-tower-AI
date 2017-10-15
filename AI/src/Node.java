@@ -37,6 +37,10 @@ public class Node {
     }
 
     public void merge(Node another) {
+
+        // merge items...
+        if (item!=null) item.merge(another.item);
+
         // merge doors...
         doors.addAll(another.doors);
         // merge monsters...
@@ -122,7 +126,7 @@ public class Node {
             builder.append(" -- Hero: ").append(hero.toString());
         }
         if (item!=null) {
-            builder.append(" -- Item: ").append(item.toString());
+            builder.append(" -- Items: ").append(item.toString());
         }
         if (doors.size()>0) {
             builder.append(" -- Doors: ").append(doors.toString());

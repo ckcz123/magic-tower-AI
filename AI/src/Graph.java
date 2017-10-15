@@ -199,9 +199,10 @@ public class Graph {
     }
 
     private boolean shouldMerge(Node n1, Node n2) {
+        if (!n1.linked.contains(n2) || !n2.linked.contains(n1)) return false;
+        if (n1.item!=null && n2.item!=null) return true;
         if (n1.item!=null || n2.item!=null) return false;
         if (n1.type==BOSS_INDEX || n2.type==BOSS_INDEX) return false;
-        if (!n1.linked.contains(n2) || !n2.linked.contains(n1)) return false;
         for (Node node: n2.linked)
             if (n1.linked.contains(node))
                 return false;
@@ -236,7 +237,9 @@ public class Graph {
                 int nx=x+dir[0], ny=y+dir[1];
                 if (nx<0 || nx>=row || ny<0 || ny>=col) continue;
                 if (nx==x2 && ny==y2) return true;
-                if (visited[nx][ny] || (map[f1][nx][ny]!=ROAD && map[f1][nx][ny]!=UPSTAIR && map[f1][nx][ny]!=DOWNSTAIR)) continue;
+                if (visited[nx][ny] || (map[f1][nx][ny]!=ROAD
+                        && map[f1][nx][ny]!=UPSTAIR && map[f1][nx][ny]!=DOWNSTAIR))
+                    continue;
                 visited[nx][ny]=true;
                 queue.offer(nx); queue.offer(ny);
             }

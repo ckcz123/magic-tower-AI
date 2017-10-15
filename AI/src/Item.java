@@ -12,14 +12,21 @@ public class Item {
     }
 
     public String toString() {
-        if (hp>0) return "hp+"+hp;
-        if (atk>0) return "atk+"+atk;
-        if (def>0) return "def+"+def;
-        if (mdef>0) return "mdef+"+mdef;
-        if (yellow>0) return "yellow+"+yellow;
-        if (blue>0) return "blue+"+blue;
-        if (red>0) return "red+"+red;
-        return "";
+        StringBuilder builder=new StringBuilder();
+        if (hp>0) builder.append("hp+").append(hp).append(';');
+        if (atk>0) builder.append("atk+").append(atk).append(';');
+        if (def>0) builder.append("def+").append(def).append(';');
+        if (mdef>0) builder.append("mdef+").append(mdef).append(';');
+        if (yellow>0) builder.append("yellow+").append(yellow).append(';');
+        if (blue>0) builder.append("blue+").append(blue).append(';');
+        if (red>0) builder.append("red+").append(red).append(';');
+        return builder.toString();
+    }
+
+    public void merge(Item another) {
+        if (another==null) return;
+        hp+=another.hp; atk+=another.atk; def+=another.def; mdef+=another.mdef;
+        yellow+=another.yellow; blue+=another.blue; red+=another.red;
     }
 
 }
