@@ -61,6 +61,8 @@ bool c_hero::moveComplete()
 		case 19: hp+=consts.bluepotion_val;break;
 		case 20: hp+=consts.yellowpotion_val; break;
 		case 21: hp+=consts.greenpotion_val; break;
+		case 22: atk+=consts.sword_val;break;
+		case 23: def+=consts.shield_val;break;
 		}
 		consts.step++;
 	}

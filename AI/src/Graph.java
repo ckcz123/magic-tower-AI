@@ -22,6 +22,9 @@ public class Graph {
     public static final int YELLOW_POTION = 20;
     public static final int GREEN_POTION = 21;
 
+    public static final int SWORD = 22;
+    public static final int SHIELD = 23;
+
     public static final int DOOR_YELLOW = 81;
     public static final int DOOR_BLUE = 82;
     public static final int DOOR_RED = 83;
@@ -40,7 +43,7 @@ public class Graph {
 
     int bossId=-1;
 
-    int p_atk, p_def, p_mdef, p_red, p_blue, p_yellow, p_green;
+    int p_atk, p_def, p_mdef, p_red, p_blue, p_yellow, p_green, p_sword, p_shield;
     HashMap<Integer, Monster> monsterMap;
 
     ArrayList<Node> list;
@@ -68,6 +71,8 @@ public class Graph {
         p_blue=scanner.nextInt();
         p_yellow=scanner.nextInt();
         p_green=scanner.nextInt();
+        p_sword=scanner.nextInt();
+        p_shield=scanner.nextInt();
 
         // Monsters
         monsterMap=new HashMap<>();
@@ -149,6 +154,14 @@ public class Graph {
                     if (map[i][j][k]==GREEN_POTION)
                         node=new Node(map[i][j][k], null, null,
                                 new Item(p_green,0,0,0,0,0,0),
+                                0,i,j,k);
+                    if (map[i][j][k]==SWORD)
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,p_sword,0,0,0,0,0),
+                                0,i,j,k);
+                    if (map[i][j][k]==SHIELD)
+                        node=new Node(map[i][j][k], null, null,
+                                new Item(0,0,p_shield,0,0,0,0),
                                 0,i,j,k);
 
                     if (map[i][j][k]==DOOR_YELLOW)

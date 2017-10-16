@@ -43,7 +43,7 @@ public:
 
 	int monster_map[300][10];
 
-	int atk_val, def_val, mdef_val, redpotion_val, bluepotion_val, yellowpotion_val, greenpotion_val;
+	int atk_val, def_val, mdef_val, redpotion_val, bluepotion_val, yellowpotion_val, greenpotion_val, sword_val, shield_val;
 
 	// 正在打开的门
 	c_map_door *map_openingdoor;
@@ -56,7 +56,7 @@ public:
 
 	//各种图块
 	hgeSprite *s_ground,*s_wall,*s_redjewel,*s_bluejewel,*s_redkey,*s_bluekey,*s_yellowkey,*s_greenjewel, *s_redpotion,*s_bluepotion,
-		*s_yellowpotion, *s_greenpotion, *s_storey;
+		*s_yellowpotion, *s_greenpotion, *s_storey, *s_sword, *s_shield;
 	hgeSprite *s_atk, *s_def, *s_mdef, *s_bg, *s_bg_font;
 	hgeSprite *s_heart, *s_damage, *s_time, *s_step,*s_reddoor,*s_bluedoor,*s_yellowdoor;
 	hgeSprite *s_upstair, *s_downstair;

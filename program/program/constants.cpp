@@ -13,7 +13,9 @@ void constants::init(FILE* file)
 	step=0;
 	time_move=time_open=time_animation=time_floor=0;
 
-	fscanf_s(file,"%d%d%d%d%d%d%d",&atk_val,&def_val,&mdef_val,&redpotion_val,&bluepotion_val,&yellowpotion_val,&greenpotion_val);
+	fscanf_s(file,"%d%d%d%d%d%d%d%d%d", 
+		&atk_val,&def_val,&mdef_val,&redpotion_val,&bluepotion_val,&yellowpotion_val,&greenpotion_val,
+		&sword_val,&shield_val);
 	int k;
 	fscanf_s(file,"%d",&k);
 	while (k--)
@@ -74,6 +76,8 @@ void constants::loadResources()
 	s_atk=new hgeSprite(ht_icon,0,32,32,32);
 	s_def=new hgeSprite(ht_icon,32,32,32,32);
 	s_mdef=new hgeSprite(ht_icon,96,160,32,32);
+	s_sword=new hgeSprite(ht_icon,0,32,32,32);
+	s_shield=new hgeSprite(ht_icon,32,32,32,32);
 
 }
 void constants::destroy()

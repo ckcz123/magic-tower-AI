@@ -78,6 +78,8 @@ hgeSprite* c_map_point::getItemSprite()
 	case 19: return consts.s_bluepotion;
 	case 20: return consts.s_yellowpotion;
 	case 21: return consts.s_greenpotion;
+	case 22: return consts.s_sword;
+	case 23: return consts.s_shield;
 	default:
 		break;
 	}
