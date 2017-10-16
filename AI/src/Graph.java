@@ -329,6 +329,6 @@ public class Graph {
 
         long end=System.currentTimeMillis();
 
-        System.err.println(String.format("Time used: %.3fs", (end-start)/1000.0));
+        System.out.println(String.format("Time used: %.3fs", (end-start)/1000.0));
     }
 }

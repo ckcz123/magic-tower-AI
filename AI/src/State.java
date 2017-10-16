@@ -40,7 +40,8 @@ public class State {
         if (another==null) return null;
 
         current=another;
-        visited[node.id]=true;
+        // visited[node.id]=true;
+        visit(node);
         route.add(current.toString());
         eatItem();
         cnt++;
@@ -57,10 +58,16 @@ public class State {
                 if (!node.shouldEat(current.hero)) continue;
                 has=true;
                 current=current.merge(node, visited);
-                visited[node.id]=true;
+                visit(node);
+                // visited[node.id]=true;
                 break;
             }
         }
+    }
+
+    public void visit(Node node) {
+        if (!visited[node.id] && current.linked.remove(node))
+            visited[node.id]=true;
     }
 
     public boolean shouldStop() {
