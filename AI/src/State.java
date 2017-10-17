@@ -43,7 +43,6 @@ public class State {
         if (another==null) return null;
 
         current=another;
-        // visited[node.id]=true;
         visit(node);
         route.add(current.toString());
         eatItem();
@@ -64,7 +63,6 @@ public class State {
                 if (node.item!=null && (node.item.special&1)!=0)
                     shopTime=Math.max(shopTime, 0);
                 visit(node);
-                // visited[node.id]=true;
                 break;
             }
         }
