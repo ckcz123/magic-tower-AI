@@ -9,6 +9,7 @@ public class State {
     Graph graph;
     boolean[] visited;
     ArrayList<String> route;
+    int shopTime;
     int cnt;
 
     public static final int STOP_COUNT = 45;
@@ -21,6 +22,7 @@ public class State {
         visited[current.id]=true;
         route=new ArrayList<>();
         route.add(current.toString());
+        shopTime=-1;
         eatItem();
     }
 
@@ -29,6 +31,7 @@ public class State {
         current=another.current;
         visited=another.visited.clone();
         route=new ArrayList<>(another.route);
+        shopTime=another.shopTime;
         cnt=another.cnt;
     }
 
@@ -58,16 +61,24 @@ public class State {
                 if (!node.shouldEat(current.hero)) continue;
                 has=true;
                 current=current.merge(node, visited);
+                if (node.item!=null && (node.item.special&1)!=0)
+                    shopTime=Math.max(shopTime, 0);
                 visit(node);
                 // visited[node.id]=true;
                 break;
             }
         }
+        // Use shop
+        while (graph.shop.useShop(current.hero, shopTime))
+            shopTime++;
     }
 
     public void visit(Node node) {
-        if (!visited[node.id] && current.linked.remove(node))
-            visited[node.id]=true;
+        if (!visited[node.id] && current.linked.remove(node)) {
+            for (Monster monster: node.monsters)
+                current.hero.money+=monster.money;
+            visited[node.id] = true;
+        }
     }
 
     public boolean shouldStop() {
@@ -79,13 +90,15 @@ public class State {
         return false;
     }
 
-    public String hashString() {
-        StringBuilder builder=new StringBuilder();
+    public long hash() {
+        long val=0;
+        int i=0;
         for (Node node: graph.list) {
             if (node.doors.isEmpty() && node.monsters.isEmpty()) continue;
-            builder.append(visited[node.id]?'1':'0');
+            if (visited[node.id]) val|=(1L<<i);
+            i++;
         }
-        return builder.toString();
+        return val;
     }
 
     public int getScore() {

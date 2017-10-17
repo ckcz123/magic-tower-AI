@@ -183,3 +183,14 @@ void c_map_floor::getUpPosition(int &x,int &y)
 	x=ux;
 	y=uy;
 }
+void c_map_floor::output(FILE* file)
+{
+	for (int i=0;i<consts.map_height;i++) {
+		for (int j=0;j<consts.map_width;j++) {
+			fprintf_s(file, "%d", getinfo(i,j)->getId());
+			if (j==consts.map_width-1) fprintf_s(file, "\n");
+			else fprintf_s(file, "\t");
+		}
+	}
+	fprintf_s(file, "\n");
+}

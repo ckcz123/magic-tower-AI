@@ -3,6 +3,7 @@
 #include <hgefont.h>
 #include <hgesprite.h>
 #include "gfxfont.h"
+#include "shop.h"
 using namespace std;
 
 class c_monster
@@ -16,6 +17,7 @@ public:
 	int getHp() {return hp;}
 	int getAtk();
 	int getDef();
+	int getMoney() {return money;}
 	int getSpecial() {return special;}
 private:
 	wchar_t name[30];

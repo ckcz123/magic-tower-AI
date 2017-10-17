@@ -1,14 +1,13 @@
-import java.util.ArrayList;
 
 /**
  * Created by oc on 2017/10/13.
  */
 public class Item {
 
-    int hp, atk, def, mdef, yellow, blue, red;
+    int hp, atk, def, mdef, yellow, blue, red, special;
 
-    public Item(int _hp, int _atk, int _def, int _mdef, int _yellow, int _blue, int _red) {
-        hp=_hp; atk=_atk; def=_def; mdef=_mdef; yellow=_yellow; blue=_blue; red=_red;
+    public Item() {
+        hp=atk=def=mdef=yellow=blue=red=special=0;
     }
 
     public String toString() {
@@ -27,6 +26,38 @@ public class Item {
         if (another==null) return;
         hp+=another.hp; atk+=another.atk; def+=another.def; mdef+=another.mdef;
         yellow+=another.yellow; blue+=another.blue; red+=another.red;
+        special+=another.special;
     }
 
+    public Item setHp(int hp) {
+        this.hp = hp; return this;
+    }
+
+    public Item setAtk(int atk) {
+        this.atk = atk; return this;
+    }
+
+    public Item setDef(int def) {
+        this.def = def; return this;
+    }
+
+    public Item setMdef(int mdef) {
+        this.mdef = mdef; return this;
+    }
+
+    public Item setYellow(int yellow) {
+        this.yellow = yellow; return this;
+    }
+
+    public Item setBlue(int blue) {
+        this.blue = blue; return this;
+    }
+
+    public Item setRed(int red) {
+        this.red = red; return this;
+    }
+
+    public Item setSpecial(int special) {
+        this.special = special; return this;
+    }
 }

@@ -18,6 +18,30 @@ public class Node {
     // 邻接表记录所有相邻节点
     HashSet<Node> linked;
 
+    public Node(int _type, int _f, int _x, int _y) {
+        type=_type; f=_f; x=_x; y=_y;
+        hero=null; item=null;
+        monsters=new ArrayList<>();
+        doors=new ArrayList<>();
+        linked=new HashSet<>();
+    }
+
+    public Node setHero(Hero _hero) {
+        hero=_hero; return this;
+    }
+
+    public Node setMonster(Monster monster) {
+        monsters.add(monster); return this;
+    }
+
+    public Node setItem(Item _item) {
+        item=_item; return this;
+    }
+
+    public Node setDoor(int door) {
+        doors.add(door); return this;
+    }
+/*
     public Node(int _type, Hero _hero, Monster monster, Item _item, int door, int _f, int _x, int _y) {
         type=_type;
         hero=_hero;
@@ -28,7 +52,7 @@ public class Node {
         if (door!=0) doors.add(door);
         f=_f; x=_x; y=_y;
         linked=new HashSet<>();
-    }
+    }*/
 
     public void setId(int _id) {id=_id;}
 
@@ -57,8 +81,7 @@ public class Node {
     }
 
     public Node merge(Node another, boolean[] visited) {
-        Node node = new Node(type, new Hero(hero), null, null, 0,
-                another.f, another.x, another.y);
+        Node node = new Node(type, another.f, another.x, another.y).setHero(new Hero(hero));
         node.linked = new HashSet<>(linked);
 
         // get item
@@ -103,17 +126,15 @@ public class Node {
 
     public boolean shouldEat(Hero hero) {
         if (item!=null) return true;
-        return false;
+        // return false;
 
-        /*
         // 无伤怪物直接干掉
         if (!doors.isEmpty()) return false;
         if (monsters.isEmpty()) return false;
         for (Monster monster: monsters)
-            if (Util.getDamage(hero.atk, hero.def, hero.mdef, monster.hp, monster.atk, monster.def, monster.special)!=0)
+            if (Util.getDamage(hero, monster)!=0)
                 return false;
         return true;
-        */
 
 
     }

@@ -22,9 +22,9 @@ void constants::init(FILE* file)
 	{
 		int id;
 		fscanf_s(file,"%d",&id);
-		fscanf_s(file,"%d%d%d%d",&monster_map[id][0],&monster_map[id][1],&monster_map[id][2],&monster_map[id][3]);
+		fscanf_s(file,"%d%d%d%d%d",&monster_map[id][0],&monster_map[id][1],&monster_map[id][2],&monster_map[id][3],&monster_map[id][4]);
 	}
-
+	/*
 	FILE* output_file;
 	int err=fopen_s(&output_file,"output.txt","r");
 	if (err!=0)
@@ -33,6 +33,8 @@ void constants::init(FILE* file)
 		fgets(route,3100,output_file);
 		fclose(output_file);
 	}
+	*/
+	strcpy_s(route, "");
 	pos=0;
 
 }
@@ -62,6 +64,7 @@ void constants::loadResources()
 	s_bluekey=new hgeSprite(ht_icon,32,0,32,32);
 	s_redkey=new hgeSprite(ht_icon,64,0,32,32);
 	s_storey=new hgeSprite(ht_icon,64,96,32,32);
+	s_money=new hgeSprite(ht_icon,32,192,32,32);
 	s_heart=new hgeSprite(ht_icon,64,192,32,32);
 	s_time=new hgeSprite(ht_icon,32,96,32,32);
 	s_step=new hgeSprite(ht_icon,32,128,32,32);

@@ -46,8 +46,8 @@ void c_monster::init(int t)
 		hp=consts.monster_map[100+id][0];
 		atk=consts.monster_map[100+id][1];
 		def=consts.monster_map[100+id][2];
-		special=consts.monster_map[100+id][3];
-		money=0;
+		money=consts.monster_map[100+id][3];
+		special=consts.monster_map[100+id][4];
 		for(int i=0;i<4;i++)
 			monster[i]=new hgeSprite(consts.ht_monster,32*i,32*position,32,32);
 	}
@@ -134,9 +134,9 @@ void c_monster::printInfo()
 		py+=32;
 		consts.s_def->Render(consts.ScreenLeft+consts.map_width*32+16,py);
 		consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",getDef());
-		//py+=32;
-		//consts.s_coin->Render(consts.ScreenLeft+consts.map_width*32+16,py);
-		//consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",money);
+		py+=32;
+		consts.s_money->Render(consts.ScreenLeft+consts.map_width*32+16,py);
+		consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",money);
 		py+=32;
 		consts.s_damage->Render(consts.ScreenLeft+consts.map_width*32+16,py);
 		int damage=hero.getDamage(this);

@@ -25,6 +25,8 @@ public class Graph {
     public static final int SWORD = 22;
     public static final int SHIELD = 23;
 
+    public static final int SHOP = 40;
+
     public static final int DOOR_YELLOW = 81;
     public static final int DOOR_BLUE = 82;
     public static final int DOOR_RED = 83;
@@ -47,6 +49,8 @@ public class Graph {
     HashMap<Integer, Monster> monsterMap;
 
     ArrayList<Node> list;
+
+    Shop shop;
 
     public Graph(Scanner scanner) {
         list=new ArrayList<>();
@@ -79,16 +83,21 @@ public class Graph {
         int num=scanner.nextInt();
         for (int i=0;i<num;i++) {
             int id=scanner.nextInt();
-            monsterMap.put(id, new Monster(id, scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt()));
+            monsterMap.put(id, new Monster(id, scanner.nextInt(), scanner.nextInt(), scanner.nextInt(),
+                    scanner.nextInt(), scanner.nextInt()));
         }
+
+        // Initial Shop
+        shop = new Shop(scanner.nextInt(), scanner.nextInt(), scanner.nextInt(),
+                scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
 
         // Initial Node
         int hp=scanner.nextInt(), atk=scanner.nextInt(), def=scanner.nextInt(), mdef=scanner.nextInt(),
+                money=scanner.nextInt(),
                 yellow=scanner.nextInt(), blue=scanner.nextInt(), red=scanner.nextInt(),
                 floor=scanner.nextInt(), x=scanner.nextInt(), y=scanner.nextInt();
 
-        Node node=new Node(0, new Hero(hp, atk, def, mdef, yellow, blue, red), null, null, 0,
-                floor, x, y);
+        Node node=new Node(0,floor,x,y).setHero(new Hero(hp, atk, def, mdef, money, yellow, blue, red));
         list.add(node);
 
         buildMap();
@@ -116,64 +125,42 @@ public class Graph {
                         stair[i][2]=j; stair[i][3]=k;
                     }
                     if (map[i][j][k]==YELLOW_KEY)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,0,0,1,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setYellow(1));
                     if (map[i][j][k]==BLUE_KEY)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,0,0,0,1,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setBlue(1));
                     if (map[i][j][k]==RED_KEY)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,0,0,0,0,1),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setRed(1));
                     if (map[i][j][k]==RED_JEWEL)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,p_atk,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setAtk(p_atk));
                     if (map[i][j][k]==BLUE_JEWEL)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,p_def,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setDef(p_def));
                     if (map[i][j][k]==GREEN_JEWEL)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,0,p_mdef,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setMdef(p_mdef));
                     if (map[i][j][k]==RED_POTION)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(p_red,0,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_red));
                     if (map[i][j][k]==BLUE_POTION)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(p_blue,0,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_blue));
                     if (map[i][j][k]==YELLOW_POTION)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(p_yellow,0,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_yellow));
                     if (map[i][j][k]==GREEN_POTION)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(p_green,0,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_blue));
                     if (map[i][j][k]==SWORD)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,p_sword,0,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setAtk(p_sword));
                     if (map[i][j][k]==SHIELD)
-                        node=new Node(map[i][j][k], null, null,
-                                new Item(0,0,p_shield,0,0,0,0),
-                                0,i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setDef(p_shield));
+                    if (map[i][j][k]==SHOP)
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setSpecial(1));
 
                     if (map[i][j][k]==DOOR_YELLOW)
-                        node=new Node(map[i][j][k], null, null, null, 1, i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setDoor(1);
                     if (map[i][j][k]==DOOR_BLUE)
-                        node=new Node(map[i][j][k], null, null, null, 2, i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setDoor(2);
                     if (map[i][j][k]==DOOR_RED)
-                        node=new Node(map[i][j][k], null, null, null, 3, i,j,k);
+                        node=new Node(map[i][j][k],i,j,k).setDoor(3);
                     if (map[i][j][k]>=MONSTER_BOUND) {
                         Monster monster=monsterMap.get(map[i][j][k]);
                         if (monster==null) continue;
-                        node=new Node(map[i][j][k], null, monster, null, 0, i, j, k);
+                        node=new Node(map[i][j][k],i, j, k).setMonster(monster);
                     }
 
                     if (node!=null)
@@ -268,8 +255,8 @@ public class Graph {
 
         int index=0;
 
-        HashSet<String> set=new HashSet<>();
-        HashMap<String, Integer> map=new HashMap<>();
+        HashSet<Long> set=new HashSet<>();
+        HashMap<Long, Integer> map=new HashMap<>();
 
         // !!! start bfs !!!!!
 
@@ -284,7 +271,7 @@ public class Graph {
         while (!queue.isEmpty()) {
             state=queue.poll();
 
-            if (!set.add(state.hashString())) continue;
+            if (!set.add(state.hash())) continue;
 
             if (state.shouldStop()) {
                 if (answer==null || answer.getScore()<state.getScore())
@@ -315,7 +302,7 @@ public class Graph {
                 // extend
                 State another=new State(state).merge(node);
                 if (another==null) continue;
-                String hash=another.hashString();
+                long hash=another.hash();
                 if (map.getOrDefault(hash, -1)>another.getScore()) continue;
                 map.put(hash, another.getScore());
                 queue.offer(another);

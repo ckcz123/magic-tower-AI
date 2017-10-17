@@ -46,6 +46,7 @@ public:
 	void getDownPosition(int&,int&);//找到地图的下楼楼梯
 	void getUpPosition(int&,int&);//找到地图的上楼楼梯
 	c_map_point* getinfo(int x, int y) {return &info[x][y];}
+	void output(FILE*);
 private:
 	int id;//楼层编号
 	int dx,dy,ux,uy;//楼梯坐标

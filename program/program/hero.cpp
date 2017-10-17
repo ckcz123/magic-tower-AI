@@ -2,6 +2,7 @@
 
 extern c_map_floor map_floor[50];
 extern constants consts;
+extern c_shop shop;
 
 c_hero::c_hero()
 {
@@ -11,14 +12,13 @@ c_hero::c_hero()
 };
 void c_hero::init(FILE* file)
 {
-	money=0;
 	face=3;
 	move=0;
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
 			sprites[i][j]=new hgeSprite(consts.ht_hero, 32*i, 33*j, 32, 33);
 	
-	fscanf_s(file, "%d%d%d%d%d%d%d%d%d%d", &hp, &atk, &def, &mdef, &yellowkey, &bluekey, &redkey, &now_floor, &y, &x);
+	fscanf_s(file, "%d%d%d%d%d%d%d%d%d%d%d", &hp, &atk, &def, &mdef, &money, &yellowkey, &bluekey, &redkey, &now_floor, &y, &x);
 }
 int c_hero::nextX()
 {
@@ -138,6 +138,9 @@ void c_hero::printInfo()
 	consts.s_mdef->Render(16,py);
 	consts.hgef->printf(60,py,HGETEXT_LEFT,"%d",mdef);
 	py+=32;
+	consts.s_money->Render(16,py);
+	consts.hgef->printf(60,py,HGETEXT_LEFT,"%d",money);
+	py+=32;
 	consts.s_yellowkey->Render(16,py);
 	consts.hgef->printf(60,py,HGETEXT_LEFT,"%d",yellowkey);
 	py+=32;
@@ -201,7 +204,23 @@ void c_hero::beat(c_monster* monster)
 	if (hp>damage)
 	{
 		hp-=damage;
+		money+=monster->getMoney();
 		monster->init(0);
 	}
 	consts.lasttime=clock();
+}
+void c_hero::useShop(int choose)
+{
+	if (money<shop.needMoney()) return;
+	money-=shop.needMoney();
+	if (choose==1) hp+=shop.getHpPoint();
+	if (choose==2) atk+=shop.getAtkPoint();
+	if (choose==3) def+=shop.getDefPoint();
+	if (choose==4) mdef+=shop.getMDefPoint();
+	shop.useShop();
+}
+void c_hero::output(FILE* file)
+{
+	fprintf_s(file, "%d %d %d %d %d %d %d %d %d %d %d\n", hp, atk, def, mdef, money,
+		yellowkey, bluekey, redkey, now_floor, x, y);
 }

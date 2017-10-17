@@ -28,6 +28,8 @@ public:
 	int getHP() {return hp;}
 	int getAtk() {return atk;}
 	int getDef() {return def;}
+	void useShop(int);
+	void output(FILE*);
 	int dir[2][4];
 private:
 	int hp,atk,def,mdef,money,redkey,bluekey,yellowkey;

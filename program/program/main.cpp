@@ -9,6 +9,9 @@ c_hero hero;
 // 常量信息
 constants consts;
 
+// 商店信息
+c_shop shop;
+
 void showMessage(const wchar_t *_s) // 显示提示
 {
 
@@ -42,6 +45,35 @@ void showMessage(const wchar_t *_s) // 显示提示
 
 	delete f;
 }
+void output()
+{
+	FILE* file;
+	fopen_s(&file, "output.txt", "w");
+	fprintf_s(file, "%d\n%d %d\n\n", consts.map_floornum, consts.map_height, consts.map_width);
+	for (int i=0;i<consts.map_floornum;i++) {
+		map_floor[i].output(file);
+	}
+	fprintf_s(file, "%d %d %d %d %d %d %d %d %d\n\n", consts.atk_val, consts.def_val, consts.mdef_val,
+		consts.redpotion_val, consts.bluepotion_val, consts.yellowpotion_val, consts.greenpotion_val,
+		consts.sword_val, consts.shield_val);
+	int cnt=0;
+	for (int i=0;i<200;i++) {
+		if (consts.monster_map[i][0]!=0)
+			cnt++;
+	}
+	fprintf_s(file, "%d\n", cnt);
+	for (int i=0;i<200;i++) {
+		if (consts.monster_map[i][1]!=0) {
+			fprintf_s(file, "%d %d %d %d %d %d\n", i, consts.monster_map[i][0], consts.monster_map[i][1],
+				consts.monster_map[i][2], consts.monster_map[i][3], consts.monster_map[i][4]);
+		}
+	}
+	fprintf_s(file, "\n");
+	shop.output(file);
+	hero.output(file);
+	fclose(file);
+	consts.setMsg(L"当前状态已输出！");
+}
 bool frameFunc()
 {
 	float dt=consts.hge->Timer_GetDelta();
@@ -65,6 +97,35 @@ bool frameFunc()
 		if(consts.isFree() && consts.hge->Input_GetKeyState(HGEK_UP) && hero.canMove(3))
 			consts.moving=true;
 	}
+
+	if (consts.isFree() && consts.hge->Input_GetKeyState(HGEK_O))
+		output();
+
+	if (consts.isFree() && consts.hge->Input_GetKeyState(HGEK_U))
+		consts.msg=consts.MESSAGE_SHOP;
+
+	if (consts.msg==consts.MESSAGE_SHOP) {
+		if (consts.hge->Input_GetKeyState(HGEK_1) && clock()-consts.lasttime>200) {
+			hero.useShop(1);
+			consts.lasttime=clock();
+		}
+		else if (consts.hge->Input_GetKeyState(HGEK_2) && clock()-consts.lasttime>200) {
+			hero.useShop(2);
+			consts.lasttime=clock();
+		}
+		else if (consts.hge->Input_GetKeyState(HGEK_3) && clock()-consts.lasttime>200) {
+			hero.useShop(3);
+			consts.lasttime=clock();
+		}
+		else if (consts.hge->Input_GetKeyState(HGEK_4) && clock()-consts.lasttime>200) {
+			hero.useShop(4);
+			consts.lasttime=clock();
+		}
+		else if (consts.hge->Input_GetKeyState(HGEK_ENTER)) {
+			consts.msg=consts.MESSAGE_NONE;
+		}
+	}
+
 
 	// 提示消息
 	if (consts.msg==consts.MESSAGE_HINT)
@@ -105,6 +166,13 @@ bool renderFunc()
 	case consts.MESSAGE_HINT:
 		showMessage(consts.hint.at(consts.nowcnt).c_str());
 		break;
+	case consts.MESSAGE_SHOP:
+	{
+		wchar_t ss[1000];
+		wsprintf(ss, L"贪婪之神\t你可以使用%d金币来提升能力：\n[1] 生命+%d\n[2] 攻击+%d\n[3] 防御+%d\n[4] 魔防+%d\n[ENTER] 退出商店",
+			shop.needMoney(), shop.getHpPoint(), shop.getAtkPoint(), shop.getDefPoint(), shop.getMDefPoint());
+		showMessage(ss);
+	}
 	default:
 		break;
 	}
@@ -140,6 +208,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 			// map_floor[i].init(i, ch);
 		}
 		consts.init(map_infile);
+		shop.init(map_infile);
 		hero.init(map_infile);
 		for (int i=0;i<consts.map_floornum;i++) {
 			map_floor[i].init(i, ch[i]);
