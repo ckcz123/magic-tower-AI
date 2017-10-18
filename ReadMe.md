@@ -1,12 +1,11 @@
 魔塔小游戏中的AI
 ================
 
-## 项目说明
 魔塔，是一个策略类的固定数值的RPG小游戏，难度不低，对智商是一次艰巨的考验。
 
 本项目可以对一个简单的塔进行计算，找寻最佳路线。
 
-有关本项目的算法说明，可参见我的博客：  http://ckcz123.com/blog/catagory/magic-tower-ai/ 。
+有关本项目的算法说明，可参见我的博客： <a href="http://ckcz123.com/blog/catagory/magic-tower-ai/" target="_blank">http://ckcz123.com/blog/catagory/magic-tower-ai/</a>。
 
 本项目由三个子项目组成：
  * **AI** ： 真正的拆塔计算过程，Java编写。
@@ -33,7 +32,7 @@
 
 直接使用Java 8以上编译运行，然后在控制台粘贴地图数据内容即可。
 
-有关算法的详细讨论请参见我的博客： http://ckcz123.com/blog/catagory/magic-tower-ai/ 。
+有关算法的详细讨论，可参见我的博客： <a href="http://ckcz123.com/blog/catagory/magic-tower-ai/" target="_blank">http://ckcz123.com/blog/catagory/magic-tower-ai/</a>。
 
 ![](AI/sample.png)
 
