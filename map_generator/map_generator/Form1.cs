@@ -212,6 +212,20 @@ namespace map_generator
 
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox1.Text))
+            {
+                Clipboard.SetText(textBox1.Text);
+                MessageBox.Show("地图已复制到剪切板！", "复制成功！");
+            }
+            else
+            {
+                MessageBox.Show("无地图内容！", "复制失败！");
+            }
+
+        }
+
 
     }
 }
