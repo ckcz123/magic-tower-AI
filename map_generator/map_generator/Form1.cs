@@ -39,7 +39,7 @@ namespace map_generator
             dict.Add(83, clipImage(map, 64, 64, road));
             dict.Add(87, clipImage(map, 32, 192, road));
             dict.Add(88, clipImage(map, 0, 192, road));
-            dict.Add(40, clipImage(map, 32, 224, road));
+            // dict.Add(40, clipImage(map, 32, 224, road));
 
             dict.Add(11, clipImage(icon, 96, 32, road));
             dict.Add(12, clipImage(icon, 64, 32, road));
@@ -56,7 +56,8 @@ namespace map_generator
 
             for (int i = 0; i < 30; i++)
             {
-                dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
+                if (i!=20 && i!=21)
+                    dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
             }
             dict.Add(199, clipImage(monster, 0, 36 * 32, road));
 
@@ -214,12 +215,12 @@ namespace map_generator
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(textBox1.Text))
+            try 
             {
                 Clipboard.SetText(textBox1.Text);
                 MessageBox.Show("地图已复制到剪切板！", "复制成功！");
             }
-            else
+            catch (Exception)
             {
                 MessageBox.Show("无地图内容！", "复制失败！");
             }

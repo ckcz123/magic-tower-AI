@@ -126,7 +126,7 @@ public class Node {
 
     public boolean shouldEat(Hero hero) {
         if (item!=null) return true;
-        // return false;
+        if (hero==null) return false;
 
         // 无伤怪物直接干掉
         if (!doors.isEmpty()) return false;

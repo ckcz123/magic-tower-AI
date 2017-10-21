@@ -52,7 +52,9 @@ public class Graph {
 
     Shop shop;
 
-    public Graph(Scanner scanner) {
+    boolean shouldEat;
+
+    public Graph(Scanner scanner, boolean _shouldMerge, boolean _shouldEat) {
         list=new ArrayList<>();
         floor=scanner.nextInt(); row=scanner.nextInt(); col=scanner.nextInt();
         map=new int[floor][row][col];
@@ -102,7 +104,9 @@ public class Graph {
 
         buildMap();
 
-        mergeNode();
+        if (_shouldMerge)
+            mergeNode();
+        shouldEat=_shouldEat;
 
         // set id
         for (int i=0;i<list.size();i++) {
@@ -143,7 +147,7 @@ public class Graph {
                     if (map[i][j][k]==YELLOW_POTION)
                         node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_yellow));
                     if (map[i][j][k]==GREEN_POTION)
-                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_blue));
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setHp(p_green));
                     if (map[i][j][k]==SWORD)
                         node=new Node(map[i][j][k],i,j,k).setItem(new Item().setAtk(p_sword));
                     if (map[i][j][k]==SHIELD)
@@ -253,7 +257,7 @@ public class Graph {
         State state=new State(this, list.get(0));
         State answer=null;
 
-        int index=0;
+        int index=0, solutions=0;
 
         HashSet<Long> set=new HashSet<>();
         HashMap<Long, Integer> map=new HashMap<>();
@@ -276,6 +280,7 @@ public class Graph {
             if (state.shouldStop()) {
                 if (answer==null || answer.getScore()<state.getScore())
                     answer=state;
+                solutions++;
                 continue;
                 //break;
             }
@@ -315,7 +320,7 @@ public class Graph {
             }
 
         }
-        System.out.println("cnt: "+index);
+        System.out.println("cnt: "+index+"; solutions: "+solutions);
         System.out.println("------ BFS FINISHED ------");
 
         if (answer==null) {

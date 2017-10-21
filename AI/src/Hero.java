@@ -24,8 +24,8 @@ public class Hero {
     }
 
     public int getScore() {
-        // return hp+1000*(atk+def)+60*mdef+300*yellow+450*blue+600*red;
-        return hp;
+        return hp+1000*(atk+def)+60*mdef+200*yellow+450*blue;
+        // return hp;
     }
 
     public String toString() {

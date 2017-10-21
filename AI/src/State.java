@@ -57,7 +57,7 @@ public class State {
             has=false;
             for (Node node: current.linked) {
                 if (visited[node.id]) continue;
-                if (!node.shouldEat(current.hero)) continue;
+                if (!node.shouldEat(graph.shouldEat?current.hero:null)) continue;
                 has=true;
                 current=current.merge(node, visited);
                 if (node.item!=null && (node.item.special&1)!=0)

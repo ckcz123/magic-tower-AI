@@ -6,8 +6,14 @@ import java.util.Scanner;
 public class Main {
     
     public static void main(String[] args){
+        boolean shouldMerge=true, shouldEat=true;
+        for (String string: args) {
+            if ("--nomerge".equals(string)) shouldMerge=false;
+            if ("--noeat".equals(string)) shouldEat=false;
+        }
+
         Scanner scanner=new Scanner(System.in);
-        Graph graph=new Graph(scanner);
+        Graph graph=new Graph(scanner, shouldMerge, shouldEat);
 
         System.out.println("------ Printing Nodes ------");
 
