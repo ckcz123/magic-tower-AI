@@ -15,7 +15,7 @@ namespace map_generator
     {
 
         Dictionary<int, Bitmap> dict;
-        Dictionary<int, Color[,]> colorDict;
+        Dictionary<int, int[,]> grayDict;
 
 
         public Form1()
@@ -56,25 +56,24 @@ namespace map_generator
 
             for (int i = 0; i < 30; i++)
             {
-                if (i!=20 && i!=21)
-                    dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
+                dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
             }
             dict.Add(199, clipImage(monster, 0, 36 * 32, road));
 
 
-            colorDict = new Dictionary<int, Color[,]>();
+            grayDict = new Dictionary<int, int[,]>();
             foreach (int id in dict.Keys)
             {
                 Bitmap bitmap = dict[id];
-                Color[,] colors = new Color[32, 32];
+                int[,] grays = new int[32, 32];
                 for (int i = 0; i < 32; i++)
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        colors[i, j] = bitmap.GetPixel(i, j);
+                        grays[i, j] = color2gray(bitmap.GetPixel(i, j));
                     }
                 }
-                colorDict.Add(id, colors);
+                grayDict.Add(id, grays);
             }
 
             SendMessage(textBox1.Handle, EM_SETTABSTOPS, 1, new int[] { 4 * 4 });
@@ -94,6 +93,11 @@ namespace map_generator
                 graphic.DrawImage(road, 0, 0, new Rectangle(0, 0, 32, 32), GraphicsUnit.Pixel);
             graphic.DrawImage(source, 0, 0, new Rectangle(offsetX, offsetY, 32, 32), GraphicsUnit.Pixel);
             return bitmap;
+        }
+
+        private int color2gray(Color color)
+        {
+            return (299 * color.R + 587 * color.G + 114 * color.B + 500) / 1000;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -117,72 +121,104 @@ namespace map_generator
             pictureBox1.Image = bitmap;
         }
 
-        private void setText(Bitmap bitmap)
+        private int[] getLeftTop(int[,] grays)
         {
-            int width = bitmap.Width / 32, height = bitmap.Height / 32;
-            int score = 0;
-            string text = "";
-            int tmpScore = 0;
-            int[,] tmpMap = new int[width, height];
-
-            for (int i = 0; i < width; i++)
+            int score = 999999999;
+            int ax = 0, ay = 0;
+            for (int offsetX = 0; offsetX < 8; offsetX++)
             {
-                for (int j = 0; j < height; j++)
+                for (int offsetY = 0; offsetY < 8; offsetY++)
                 {
-                    // Bitmap temp = clipImage(bitmap, 32 * j, 32 * i);
-                    Color[,] colors = new Color[32, 32];
-                    for (int x = 0; x < 32; x++)
+                    int tmpScore = 999999999;
+                    foreach (int[,] value in grayDict.Values)
                     {
-                        for (int y = 0; y < 32; y++)
-                        {
-                            colors[x, y] = bitmap.GetPixel(32 * j + x, 32 * i + y);
-                        }
-                    }
-                    int t = 0, v = 0;
-                    foreach (int id in colorDict.Keys)
-                    {
-                        // Bitmap value = dict[id];
-                        Color[,] value = colorDict[id];
                         int s = 0;
                         for (int x = 0; x < 32; x++)
                         {
                             for (int y = 0; y < 32; y++)
                             {
-                                if (colors[x, y].Equals(value[x, y]))
-                                {
-                                    s++;
-                                }
+                                s += Math.Abs(value[x, y] - grays[x + offsetX, y + offsetY]);
                             }
                         }
-                        if (t < s)
+                        if (tmpScore > s)
+                        {
+                            tmpScore = s;
+                        }
+                    }
+                    if (score > tmpScore)
+                    {
+                        score = tmpScore;
+                        ax = offsetX; ay = offsetY;
+                    }
+                }
+            }
+            return new int[] { ax, ay };
+        }
+
+        private void setText(Bitmap bitmap)
+        {
+            int width = bitmap.Width / 32, height = bitmap.Height / 32;
+            int[,] grays = bitmapToGray(bitmap);
+            string text = "";
+            int[,] ans = new int[width, height];
+
+            int[] offset = getLeftTop(grays);
+            int offsetX = offset[0], offsetY = offset[1];
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    int t = 999999999, v = 0;
+                    foreach (int id in grayDict.Keys)
+                    {
+                        // Bitmap value = dict[id];
+                        int[,] value = grayDict[id];
+                        int s = 0;
+                        for (int x = 0; x < 32; x++)
+                        {
+                            for (int y = 0; y < 32; y++)
+                            {
+                                s += Math.Abs(value[x, y] - grays[32 * j + x + offsetX, 32 * i + y + offsetY]);
+                            }
+                        }
+                        if (t > s)
                         {
                             t = s;
                             v = id;
                         }
                     }
-                    tmpScore += t;
-                    tmpMap[i, j] = v;
+                    ans[i, j] = v;
                 }
             }
-            if (score < tmpScore)
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < width; i++)
             {
-                score = tmpScore;
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
                 {
-                    for (int j = 0; j < height; j++)
-                    {
-                        // text += tmpMap[i, j];
-                        builder.Append(tmpMap[i, j]);
-                        if (j != height - 1) builder.Append('\t');
-                        else builder.Append("\r\n");
-                    }
+                    builder.Append(ans[i, j]);
+                    if (j != height - 1) builder.Append('\t');
+                    else builder.Append("\r\n");
                 }
-                text = builder.ToString();
             }
+            text = builder.ToString();
 
             textBox1.Text = text;
             button2_Click(null, null);
+        }
+
+        private int[,] bitmapToGray(Bitmap bitmap)
+        {
+            int width = bitmap.Width, height = bitmap.Height;
+            int[,] grays = new int[width, height];
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    grays[i, j] = color2gray(bitmap.GetPixel(i, j));
+                }
+            }
+            return grays;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -210,7 +246,6 @@ namespace map_generator
             graphic.DrawImage(image, 0, 0);
             // pictureBox1.Image = bitmap;
             setText(bitmap);
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -222,7 +257,7 @@ namespace map_generator
             }
             catch (Exception)
             {
-                MessageBox.Show("无地图内容！", "复制失败！");
+                MessageBox.Show("请全选并手动复制。", "复制失败！");
             }
 
         }
