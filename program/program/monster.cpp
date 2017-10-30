@@ -36,9 +36,18 @@ void c_monster::init(int t)
 	case 26:wcscpy_s(name,L"骑士队长");position=25;break;
 	case 27:wcscpy_s(name,L"金骑士");position=26;break;
 	case 28:wcscpy_s(name,L"灵武士");position=27;break;
+	case 29:wcscpy_s(name,L"红衣魔王");position=28;break;
 	case 30:wcscpy_s(name,L"白衣武士");position=29;break;
-	case 32:wcscpy_s(name,L"铁面人");position=34;break;
-	case 33:wcscpy_s(name,L"近卫骑士");position=39;break;
+	case 31:wcscpy_s(name,L"灵法师");position=30;break;
+	case 32:wcscpy_s(name,L"黄头怪");position=31;break;
+	case 33:wcscpy_s(name,L"紫骷髅");position=32;break;
+	case 34:wcscpy_s(name,L"紫蝙蝠");position=33;break;
+	case 35:wcscpy_s(name,L"铁面人");position=34;break;
+	case 36:wcscpy_s(name,L"绿兽人");position=35;break;
+	case 37:wcscpy_s(name,L"黑衣魔王");position=36;break;
+	case 38:wcscpy_s(name,L"黄衣魔王");position=37;break;
+	case 39:wcscpy_s(name,L"青衣武士");position=38;break;
+	case 40:wcscpy_s(name,L"近卫骑士");position=39;break;
 	case 99:wcscpy_s(name,L"黑衣魔王");position=36;break;
 	default:position=-1;
 	}

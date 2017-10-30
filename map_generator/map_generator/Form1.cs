@@ -54,7 +54,7 @@ namespace map_generator
             dict.Add(22, clipImage(icon, 0, 32, road));
             dict.Add(23, clipImage(icon, 32, 32, road));
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 40; i++)
             {
                 dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
             }
