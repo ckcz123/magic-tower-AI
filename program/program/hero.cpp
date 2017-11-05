@@ -198,6 +198,33 @@ int c_hero::getDamage(int hero_atk, int hero_def, int hero_mdef,
 	// Ä§·À²»»ØÑª
 	return ans<=0?0:ans;
 }
+int c_hero::getCritical(int m_hp, int m_atk, int m_def, int m_spe)
+{
+	if (m_spe==3 || m_spe==10) return -1;
+	int last=getDamage(atk, def, mdef, m_hp, m_atk, m_def, m_spe);
+	if (last==0) return 0;
+	for (int i = atk+1; i <= m_hp+m_def; i++)
+	{
+		int damage = getDamage(i, def, mdef, m_hp, m_atk, m_def, m_spe);
+		if (damage < last)
+			return i-atk;
+		last = damage;
+	}
+	return 0;
+}
+int c_hero::getCriticalDamage(int m_hp, int m_atk, int m_def, int m_spe)
+{
+	int c=getCritical(m_hp,m_atk,m_def,m_spe);
+	if (c<=0) return 0;
+	int last=getDamage(atk, def, mdef, m_hp, m_atk, m_def, m_spe);
+	if (last==MAX_DAMAGE) return 0;
+	return last-getDamage(atk+c, def, mdef, m_hp, m_atk, m_def, m_spe);
+}
+int c_hero::getDefDamage(int m_hp, int m_atk, int m_def, int m_spe)
+{
+	return getDamage(atk, def, mdef, m_hp, m_atk, m_def, m_spe)-
+		getDamage(atk, def+1, mdef, m_hp, m_atk, m_def, m_spe);
+}
 void c_hero::beat(c_monster* monster)
 {
 	int damage=getDamage(monster);

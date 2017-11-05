@@ -23,6 +23,9 @@ public:
 	bool canBeat(c_monster*);//能否打败怪物
 	int getDamage(c_monster*);//打败怪物普通伤害
 	int getDamage(int h_atk, int h_def, int h_mdef, int m_hp, int m_atk, int m_def, int m_spe);
+	int getCritical(int m_hp, int m_atk, int m_def, int m_spe);
+	int getCriticalDamage(int m_hp, int m_atk, int m_def, int m_spe);
+	int getDefDamage(int m_hp, int m_atk, int m_def, int m_spe);
 	void beat(c_monster*);//打怪物
 	int getNowFloor() {return now_floor;}
 	int getHP() {return hp;}

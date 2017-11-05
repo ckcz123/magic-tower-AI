@@ -148,11 +148,22 @@ void c_monster::printInfo()
 		consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",money);
 		py+=32;
 		consts.s_damage->Render(consts.ScreenLeft+consts.map_width*32+16,py);
-		int damage=hero.getDamage(this);
+		int damage=hero.getDamage(this), defDamage=hero.getDefDamage(getHp(), getAtk(), getDef(), getSpecial());
+		int critical=hero.getCritical(getHp(), getAtk(), getDef(), getSpecial());
+		int criticalDamage=hero.getCriticalDamage(getHp(), getAtk(), getDef(), getSpecial());
 		if (damage==c_hero::MAX_DAMAGE)
-			consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"???");
+			consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"???  (%d)",defDamage);
 		else
-			consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",damage);
+			consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d  (%d)",damage, defDamage);
+		py+=32;
+		if (critical>0)
+		{
+			consts.s_critical->Render(consts.ScreenLeft+consts.map_width*32+16,py);
+			if (criticalDamage>0)
+				consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d  (%d)",critical,criticalDamage);
+			else
+				consts.hgef->printf(consts.ScreenLeft+consts.map_width*32+60,py,HGETEXT_LEFT,"%d",critical);
+		}
 	}
 }
 void c_monster::changeState()

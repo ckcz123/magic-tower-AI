@@ -81,7 +81,7 @@ void constants::loadResources()
 	s_mdef=new hgeSprite(ht_icon,96,160,32,32);
 	s_sword=new hgeSprite(ht_icon,0,32,32,32);
 	s_shield=new hgeSprite(ht_icon,32,32,32,32);
-
+	s_critical=new hgeSprite(ht_icon,64,128,32,32);
 }
 void constants::destroy()
 {
