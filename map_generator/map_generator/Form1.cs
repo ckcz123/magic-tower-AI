@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace map_generator
 {
@@ -15,8 +16,7 @@ namespace map_generator
     {
 
         Dictionary<int, Bitmap> dict;
-        Dictionary<int, int[,]> grayDict;
-
+        Dictionary<int, HSV[,]> colorDict;
 
         public Form1()
         {
@@ -34,46 +34,51 @@ namespace map_generator
 
             dict.Add(0, road);
             dict.Add(1, clipImage(map, 32, 0));
+            dict.Add(2, clipImage(map, 64, 0));
+            dict.Add(3, clipImage(map, 32, 32));
+            dict.Add(4, clipImage(map, 0, 32));
+            dict.Add(6, clipImage(map, 96, 0));
             dict.Add(81, clipImage(map, 0, 64, road));
             dict.Add(82, clipImage(map, 32, 64, road));
             dict.Add(83, clipImage(map, 64, 64, road));
+            dict.Add(84, clipImage(map, 96, 64, road));
             dict.Add(87, clipImage(map, 32, 192, road));
             dict.Add(88, clipImage(map, 0, 192, road));
             // dict.Add(40, clipImage(map, 32, 224, road));
 
-            dict.Add(11, clipImage(icon, 96, 32, road));
-            dict.Add(12, clipImage(icon, 64, 32, road));
-            dict.Add(13, clipImage(icon, 0, 64, road));
-            dict.Add(15, clipImage(icon, 0, 0, road));
-            dict.Add(16, clipImage(icon, 32, 0, road));
-            dict.Add(17, clipImage(icon, 64, 0, road));
-            dict.Add(18, clipImage(icon, 64, 64, road));
-            dict.Add(19, clipImage(icon, 96, 64, road));
-            dict.Add(20, clipImage(icon, 96, 96, road));
-            dict.Add(21, clipImage(icon, 96, 128, road));
-            dict.Add(22, clipImage(icon, 0, 32, road));
-            dict.Add(23, clipImage(icon, 32, 32, road));
+            dict.Add(27, clipImage(icon, 96, 32, road));
+            dict.Add(28, clipImage(icon, 64, 32, road));
+            dict.Add(29, clipImage(icon, 0, 64, road));
+            dict.Add(21, clipImage(icon, 0, 0, road));
+            dict.Add(22, clipImage(icon, 32, 0, road));
+            dict.Add(23, clipImage(icon, 64, 0, road));
+            dict.Add(24, clipImage(icon, 96, 0, road));
+            dict.Add(31, clipImage(icon, 64, 64, road));
+            dict.Add(32, clipImage(icon, 96, 64, road));
+            dict.Add(33, clipImage(icon, 96, 96, road));
+            dict.Add(34, clipImage(icon, 96, 128, road));
+            dict.Add(35, clipImage(icon, 0, 32, road));
+            dict.Add(36, clipImage(icon, 32, 32, road));
 
             for (int i = 0; i < 40; i++)
             {
-                dict.Add(101 + i, clipImage(monster, 0, 32 * i, road));
+                dict.Add(201 + i, clipImage(monster, 0, 32 * i, road));
             }
-            dict.Add(199, clipImage(monster, 0, 36 * 32, road));
+            dict.Add(299, clipImage(monster, 0, 28 * 32, road));
 
-
-            grayDict = new Dictionary<int, int[,]>();
+            colorDict = new Dictionary<int, HSV[,]>();
             foreach (int id in dict.Keys)
             {
                 Bitmap bitmap = dict[id];
-                int[,] grays = new int[32, 32];
+                HSV[,] colors = new HSV[32, 32];
                 for (int i = 0; i < 32; i++)
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        grays[i, j] = color2gray(bitmap.GetPixel(i, j));
+                        colors[i, j] = new HSV(bitmap.GetPixel(i, j));
                     }
                 }
-                grayDict.Add(id, grays);
+                colorDict.Add(id, colors);
             }
 
             SendMessage(textBox1.Handle, EM_SETTABSTOPS, 1, new int[] { 4 * 4 });
@@ -95,15 +100,17 @@ namespace map_generator
             return bitmap;
         }
 
-        private int color2gray(Color color)
-        {
-            return (299 * color.R + 587 * color.G + 114 * color.B + 500) / 1000;
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             Bitmap bitmap = new Bitmap(416, 416);
             Graphics graphic = Graphics.FromImage(bitmap);
+
+            string text = textBox1.Text;
+            text = new Regex("\\t+").Replace(text, "  ");
+            text = text.Replace("[", "").Replace("]", "").Replace(",", "");
+            text = new Regex(" +").Replace(text, "\t");
+            textBox1.Text = text;
+
             string[] lines = textBox1.Text.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             {
@@ -119,106 +126,6 @@ namespace map_generator
                 }
             }
             pictureBox1.Image = bitmap;
-        }
-
-        private int[] getLeftTop(int[,] grays)
-        {
-            int score = 999999999;
-            int ax = 0, ay = 0;
-            for (int offsetX = 0; offsetX < 8; offsetX++)
-            {
-                for (int offsetY = 0; offsetY < 8; offsetY++)
-                {
-                    int tmpScore = 999999999;
-                    foreach (int[,] value in grayDict.Values)
-                    {
-                        int s = 0;
-                        for (int x = 0; x < 32; x++)
-                        {
-                            for (int y = 0; y < 32; y++)
-                            {
-                                s += Math.Abs(value[x, y] - grays[x + offsetX, y + offsetY]);
-                            }
-                        }
-                        if (tmpScore > s)
-                        {
-                            tmpScore = s;
-                        }
-                    }
-                    if (score > tmpScore)
-                    {
-                        score = tmpScore;
-                        ax = offsetX; ay = offsetY;
-                    }
-                }
-            }
-            return new int[] { ax, ay };
-        }
-
-        private void setText(Bitmap bitmap)
-        {
-            int width = bitmap.Width / 32, height = bitmap.Height / 32;
-            int[,] grays = bitmapToGray(bitmap);
-            string text = "";
-            int[,] ans = new int[width, height];
-
-            int[] offset = getLeftTop(grays);
-            int offsetX = offset[0], offsetY = offset[1];
-
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    int t = 999999999, v = 0;
-                    foreach (int id in grayDict.Keys)
-                    {
-                        // Bitmap value = dict[id];
-                        int[,] value = grayDict[id];
-                        int s = 0;
-                        for (int x = 0; x < 32; x++)
-                        {
-                            for (int y = 0; y < 32; y++)
-                            {
-                                s += Math.Abs(value[x, y] - grays[32 * j + x + offsetX, 32 * i + y + offsetY]);
-                            }
-                        }
-                        if (t > s)
-                        {
-                            t = s;
-                            v = id;
-                        }
-                    }
-                    ans[i, j] = v;
-                }
-            }
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    builder.Append(ans[i, j]);
-                    if (j != height - 1) builder.Append('\t');
-                    else builder.Append("\r\n");
-                }
-            }
-            text = builder.ToString();
-
-            textBox1.Text = text;
-            button2_Click(null, null);
-        }
-
-        private int[,] bitmapToGray(Bitmap bitmap)
-        {
-            int width = bitmap.Width, height = bitmap.Height;
-            int[,] grays = new int[width, height];
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    grays[i, j] = color2gray(bitmap.GetPixel(i, j));
-                }
-            }
-            return grays;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -244,16 +151,40 @@ namespace map_generator
             Bitmap bitmap = new Bitmap(image.Width, image.Height);
             Graphics graphic = Graphics.FromImage(bitmap);
             graphic.DrawImage(image, 0, 0);
-            // pictureBox1.Image = bitmap;
-            setText(bitmap);
+            textBox1.Text = Core.calculate(bitmap, colorDict);
+            button2_Click(null, null);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
-                Clipboard.SetText(textBox1.Text);
-                MessageBox.Show("地图已复制到剪切板！", "复制成功！");
+                string text = textBox1.Text;
+                string[] strings = text.Split(new char[] { '\n' });
+
+                StringBuilder builder = new StringBuilder();
+                foreach (string s in strings)
+                {
+                    if (s.Trim().Length == 0) continue;
+                    builder.Append('[');
+                    string[] ss = s.Trim().Split(new char[] { '\t' });
+
+
+                    int l = 5;
+                    foreach (string s1 in ss)
+                    {
+                        if (l < 5)
+                        {
+                            builder.Append(',');
+                            builder.Append(' ', 5 - l);
+                        }
+                        builder.Append(s1);
+                        l = s1.Length;
+                    }
+                    builder.Append(']').Append(',').Append('\n');
+                }
+                Clipboard.SetText(builder.ToString());
+                MessageBox.Show("地图的JS格式已复制到剪切板！", "复制成功！");
             }
             catch (Exception)
             {
@@ -261,7 +192,6 @@ namespace map_generator
             }
 
         }
-
 
     }
 }

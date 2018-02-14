@@ -63,6 +63,7 @@ void constants::loadResources()
 	s_yellowkey=new hgeSprite(ht_icon,0,0,32,32);
 	s_bluekey=new hgeSprite(ht_icon,32,0,32,32);
 	s_redkey=new hgeSprite(ht_icon,64,0,32,32);
+	s_greenkey=new hgeSprite(ht_icon,96,0,32,32);
 	s_storey=new hgeSprite(ht_icon,64,96,32,32);
 	s_money=new hgeSprite(ht_icon,32,192,32,32);
 	s_heart=new hgeSprite(ht_icon,64,192,32,32);

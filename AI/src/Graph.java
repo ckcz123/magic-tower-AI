@@ -9,33 +9,35 @@ public class Graph {
     public static final int WALL = 1;
 
 
-    public static final int RED_JEWEL = 11;
-    public static final int BLUE_JEWEL = 12;
-    public static final int GREEN_JEWEL = 13;
+    public static final int RED_JEWEL = 27;
+    public static final int BLUE_JEWEL = 28;
+    public static final int GREEN_JEWEL = 29;
 
-    public static final int YELLOW_KEY = 15;
-    public static final int BLUE_KEY = 16;
-    public static final int RED_KEY = 17;
+    public static final int YELLOW_KEY = 21;
+    public static final int BLUE_KEY = 22;
+    public static final int RED_KEY = 23;
+    public static final int GREEN_KEY = 24;
 
-    public static final int RED_POTION = 18;
-    public static final int BLUE_POTION = 19;
-    public static final int YELLOW_POTION = 20;
-    public static final int GREEN_POTION = 21;
+    public static final int RED_POTION = 31;
+    public static final int BLUE_POTION = 32;
+    public static final int GREEN_POTION = 33;
+    public static final int YELLOW_POTION = 34;
 
-    public static final int SWORD = 22;
-    public static final int SHIELD = 23;
+    public static final int SWORD = 35;
+    public static final int SHIELD = 36;
 
     public static final int SHOP = 40;
 
     public static final int DOOR_YELLOW = 81;
     public static final int DOOR_BLUE = 82;
     public static final int DOOR_RED = 83;
+    public static final int DOOR_GREEN = 84;
 
     public static final int UPSTAIR = 87;
     public static final int DOWNSTAIR = 88;
 
-    public static final int MONSTER_BOUND = 101;
-    public static final int BOSS_INDEX = 199;
+    public static final int MONSTER_BOUND = 201;
+    public static final int BOSS_INDEX = 299;
 
 
     int floor, row, col;
@@ -99,7 +101,7 @@ public class Graph {
                 yellow=scanner.nextInt(), blue=scanner.nextInt(), red=scanner.nextInt(),
                 floor=scanner.nextInt(), x=scanner.nextInt(), y=scanner.nextInt();
 
-        Node node=new Node(0,floor,x,y).setHero(new Hero(hp, atk, def, mdef, money, yellow, blue, red));
+        Node node=new Node(0,floor,x,y).setHero(new Hero(hp, atk, def, mdef, money, yellow, blue, red, 0));
         list.add(node);
 
         buildMap();
@@ -134,6 +136,8 @@ public class Graph {
                         node=new Node(map[i][j][k],i,j,k).setItem(new Item().setBlue(1));
                     if (map[i][j][k]==RED_KEY)
                         node=new Node(map[i][j][k],i,j,k).setItem(new Item().setRed(1));
+                    if (map[i][j][k]==GREEN_KEY)
+                        node=new Node(map[i][j][k],i,j,k).setItem(new Item().setGreen(1));
                     if (map[i][j][k]==RED_JEWEL)
                         node=new Node(map[i][j][k],i,j,k).setItem(new Item().setAtk(p_atk));
                     if (map[i][j][k]==BLUE_JEWEL)
@@ -161,6 +165,8 @@ public class Graph {
                         node=new Node(map[i][j][k],i,j,k).setDoor(2);
                     if (map[i][j][k]==DOOR_RED)
                         node=new Node(map[i][j][k],i,j,k).setDoor(3);
+                    if (map[i][j][k]==DOOR_GREEN)
+                        node=new Node(map[i][j][k],i,j,k).setDoor(4);
                     if (map[i][j][k]>=MONSTER_BOUND) {
                         Monster monster=monsterMap.get(map[i][j][k]);
                         if (monster==null) continue;

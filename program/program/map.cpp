@@ -8,7 +8,10 @@ extern constants consts;
 void c_map_door::init(int t)
 {
 	type=t;
-	if(t<=4)for(int i=0;i<4;i++) door[i]=new hgeSprite(consts.ht_map,32*(t-1),32*(i+2),32,32);
+	if(t<=4)
+		for(int i=0;i<4;i++) {
+			door[i]=new hgeSprite(consts.ht_map,32*(t-1),32*(i+2),32,32);
+		}
 	if(t==7)for(int i=0;i<4;i++) door[i]=consts.s_upstair;
 	if(t==8)for(int i=0;i<4;i++) door[i]=consts.s_downstair;
 	state=0;
@@ -35,12 +38,12 @@ void c_map_point::init(int id)
 	else if (id<=40) item=id;
 	else if (id<=80) ;
 	else if (id<=100) door.init(id-80);
-	else if (id<=200) monster.init(id-100);
+	else if (id<=300) monster.init(id-200);
 	else ;
 }
 int c_map_point::getId()
 {
-	if (monster.getId()!=0) return 100+monster.getId();
+	if (monster.getId()!=0) return 200+monster.getId();
 	if (door.getType()!=0) return 80+door.getType();
 	if (item!=0) return item;
 	return type;
@@ -68,18 +71,19 @@ hgeSprite* c_map_point::getItemSprite()
 {
 	switch (item)
 	{
-	case 11: return consts.s_redjewel;
-	case 12: return consts.s_bluejewel;
-	case 13: return consts.s_greenjewel;
-	case 15: return consts.s_yellowkey;
-	case 16: return consts.s_bluekey;
-	case 17: return consts.s_redkey;
-	case 18: return consts.s_redpotion;
-	case 19: return consts.s_bluepotion;
-	case 20: return consts.s_yellowpotion;
-	case 21: return consts.s_greenpotion;
-	case 22: return consts.s_sword;
-	case 23: return consts.s_shield;
+	case 21: return consts.s_yellowkey;
+	case 22: return consts.s_bluekey;
+	case 23: return consts.s_redkey;
+	case 24: return consts.s_greenkey;
+	case 27: return consts.s_redjewel;
+	case 28: return consts.s_bluejewel;
+	case 29: return consts.s_greenjewel;
+	case 31: return consts.s_redpotion;
+	case 32: return consts.s_bluepotion;
+	case 33: return consts.s_greenpotion;
+	case 34: return consts.s_yellowpotion;
+	case 35: return consts.s_sword;
+	case 36: return consts.s_shield;
 	default:
 		break;
 	}
@@ -97,6 +101,7 @@ bool c_map_point::canMove(int f)
 			case 1:c=hero.openYellowDoor();break;
 			case 2:c=hero.openBlueDoor();break;
 			case 3:c=hero.openRedDoor();break;
+			case 4:c=hero.openGreenDoor();break;
 			case 7:hero.upstair();break;
 			case 8:hero.downstair();break;
 			}

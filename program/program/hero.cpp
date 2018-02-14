@@ -51,18 +51,19 @@ bool c_hero::moveComplete()
 		char item=map_floor[now_floor].getItem(x,y);
 		switch(item)
 		{
-		case 11: atk+=consts.atk_val;break;
-		case 12: def+=consts.def_val;break;
-		case 13: mdef+=consts.mdef_val;break;
-		case 15: yellowkey++;break;
-		case 16: bluekey++;break;
-		case 17: redkey++;break;
-		case 18: hp+=consts.redpotion_val;break;
-		case 19: hp+=consts.bluepotion_val;break;
-		case 20: hp+=consts.yellowpotion_val; break;
-		case 21: hp+=consts.greenpotion_val; break;
-		case 22: atk+=consts.sword_val;break;
-		case 23: def+=consts.shield_val;break;
+		case 21: yellowkey++;break;
+		case 22: bluekey++;break;
+		case 23: redkey++;break;
+		case 24: greenkey++;break;
+		case 27: atk+=consts.atk_val;break;
+		case 28: def+=consts.def_val;break;
+		case 29: mdef+=consts.mdef_val;break;
+		case 31: hp+=consts.redpotion_val;break;
+		case 32: hp+=consts.bluepotion_val; break;
+		case 33: hp+=consts.greenpotion_val; break;
+		case 34: hp+=consts.yellowpotion_val;break;
+		case 35: atk+=consts.atk_val;break;
+		case 36: def+=consts.shield_val;break;
 		}
 		consts.step++;
 	}
@@ -93,6 +94,15 @@ bool c_hero::openYellowDoor()
 	if(yellowkey>0)
 	{
 		yellowkey--;
+		return true;
+	}
+	return false;
+}
+bool c_hero::openGreenDoor()
+{
+	if(greenkey>0)
+	{
+		greenkey--;
 		return true;
 	}
 	return false;
@@ -149,6 +159,9 @@ void c_hero::printInfo()
 	py+=32;
 	consts.s_redkey->Render(16,py);
 	consts.hgef->printf(60,py,HGETEXT_LEFT,"%d",redkey);
+	py+=32;
+	consts.s_greenkey->Render(16,py);
+	consts.hgef->printf(60,py,HGETEXT_LEFT,"%d",greenkey);
 }
 bool c_hero::canBeat(c_monster* monster) // ÅĞ¶ÏÄÜ·ñ´ò°Ü
 {

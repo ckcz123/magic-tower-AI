@@ -57,12 +57,12 @@ void output()
 		consts.redpotion_val, consts.bluepotion_val, consts.yellowpotion_val, consts.greenpotion_val,
 		consts.sword_val, consts.shield_val);
 	int cnt=0;
-	for (int i=0;i<200;i++) {
+	for (int i=0;i<300;i++) {
 		if (consts.monster_map[i][0]!=0)
 			cnt++;
 	}
 	fprintf_s(file, "%d\n", cnt);
-	for (int i=0;i<200;i++) {
+	for (int i=0;i<300;i++) {
 		if (consts.monster_map[i][1]!=0) {
 			fprintf_s(file, "%d %d %d %d %d %d\n", i, consts.monster_map[i][0], consts.monster_map[i][1],
 				consts.monster_map[i][2], consts.monster_map[i][3], consts.monster_map[i][4]);

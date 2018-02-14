@@ -15,6 +15,7 @@ public:
 	bool openRedDoor();//打开红色的门
 	bool openBlueDoor();//打开蓝色的门
 	bool openYellowDoor();//打开黄色的门
+	bool openGreenDoor();//打开黄色的门
 	void upstair();//上楼
 	void downstair();//下楼
 	void turn(); // 转向
@@ -35,7 +36,7 @@ public:
 	void output(FILE*);
 	int dir[2][4];
 private:
-	int hp,atk,def,mdef,money,redkey,bluekey,yellowkey;
+	int hp,atk,def,mdef,money,redkey,bluekey,yellowkey,greenkey;
 	int x,y,move,face,now_floor;
 	hgeSprite* sprites[4][4];
 };
